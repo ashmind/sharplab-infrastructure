@@ -1,7 +1,7 @@
 @{
     'Rules' = @{
         'PSAvoidUsingCmdletAliases' = @{
-            'Whitelist' = @('?', '%', 'sort', 'select')
+            'Whitelist' = @('?', '%')
         }
     }
 }
