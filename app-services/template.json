@@ -92,7 +92,8 @@
             "name": "[concat(parameters('sites_default_name_azure'), '/', parameters('sites_default_name_azure'), '.azurewebsites.net')]",
             "location": "East US",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_default_name_azure'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('sites_default_name_azure'))]",
+                "[resourceId('Microsoft.Web/sites/hostNameBindings', parameters('sites_default_name_azure'), parameters('sites_default_name_public'))]"
             ],
             "properties": {
                 "siteName": "[parameters('sites_default_name_azure')]",
