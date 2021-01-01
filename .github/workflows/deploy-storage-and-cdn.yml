@@ -18,7 +18,6 @@ jobs:
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-        enable-AzPSSession: true
 
     - uses: azure/arm-deploy@v1
       with:
