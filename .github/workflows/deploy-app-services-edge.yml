@@ -2,12 +2,15 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '.github/workflows/deploy-app-service-edge.yml'
+      - 'app-services/**'
 
-name: Deploy Edge
+name: Deploy App Services (Edge)
 
 jobs:
-  build-and-deploy:
-    name: Build and Deploy
+  deploy:
+    name: Deploy to Azure
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@main
