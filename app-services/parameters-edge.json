@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_default_name_azure": {
+            "value": "sharplab-edge"
+        },
+        "sites_default_name_public": {
+            "value": "edge.sharplab.io"
+        },
+        "sites_architecture_prefix": {
+            "value": "sl-a-edge"
+        },
+        "serverfarms_main_name": {
+            "value": "SharpLab-Main"
+        },
+        "serverfarms_unstable_name": {
+            "value": "SharpLab-Unstable"
+        }
+    }
+}
