@@ -8,6 +8,9 @@
         "sites_default_name_public": {
             "value": "edge.sharplab.io"
         },
+        "sites_default_certificate_thumbprint": {
+            "value": "(inserted by Update-CertificateThumbpint.ps1)"
+        },
         "sites_architecture_prefix": {
             "value": "sl-a-edge"
         },

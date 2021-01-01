@@ -56,6 +56,7 @@
                     {
                         "name": "[parameters('sites_default_name_public')]",
                         "sslState": "SniEnabled",
+                        "thumbprint": "[parameters('sites_default_certificate_thumbprint')]"
                         "hostType": "Standard"
                     },
                     {
@@ -83,7 +84,8 @@
             "properties": {
                 "siteName": "[parameters('sites_default_name_azure')]",
                 "hostNameType": "Verified",
-                "sslState": "SniEnabled"
+                "sslState": "SniEnabled",
+                "thumbprint": "[parameters('sites_default_certificate_thumbprint')]"
             }
         },
         {
