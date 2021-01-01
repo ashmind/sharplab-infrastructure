@@ -1,5 +1,5 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "sites_default_name_azure": {
@@ -10,12 +10,18 @@
         },
         "sites_architecture_prefix": {
             "type": "String"
+        },
+        "serverfarms_main_name": {
+            "type": "String"
+        },
+        "serverfarms_unstable_name": {
+            "type": "String"
         }
     },
     "variables": {
         "serverfarms_main_id": "[resourceId('Microsoft.Web/serverFarms', parameters('serverfarms_main_name'))]",
         "serverfarms_unstable_id": "[resourceId('Microsoft.Web/serverFarms', parameters('serverfarms_unstable_name'))]",
-        "components_default_site_insights_name": "[concat(parameters('sites_default_name_azure'), '-insights')]",        
+        "components_default_site_insights_name": "[concat(parameters('sites_default_name_azure'), '-insights')]",
         "sites_core_x64_name": "[concat(parameters('sites_architecture_prefix'), 'core-x64')]",
         "sites_core_x64_profiled_name": "[concat(parameters('sites_architecture_prefix'), 'core-x64-profiled')]",
         "sites_netfx_name": "[concat(parameters('sites_architecture_prefix'), 'netfx')]"
@@ -29,8 +35,6 @@
             "kind": "other",
             "properties": {
                 "Application_Type": "other",
-                "Flow_Type": "Redfield",
-                "Request_Source": "IbizaAIExtension",
                 "RetentionInDays": 90,
                 "publicNetworkAccessForIngestion": "Enabled",
                 "publicNetworkAccessForQuery": "Enabled"
@@ -43,7 +47,7 @@
             "name": "[parameters('sites_default_name_azure')]",
             "location": "East US",
             "tags": {
-                "[concat('hidden-related:', parameters('serverfarms_main_id')]": "empty"
+                "[concat('hidden-related:', variables('serverfarms_main_id'))]": "empty"
             },
             "kind": "app",
             "properties": {
@@ -65,7 +69,7 @@
                         "hostType": "Repository"
                     }
                 ],
-                "serverFarmId": "[parameters('serverfarms_main_id')]"
+                "serverFarmId": "[variables('serverfarms_main_id')]"
             }
         },
         {
@@ -104,11 +108,11 @@
                 "[resourceId('Microsoft.Web/sites', parameters('sites_default_name_azure'))]"
             ],
             "tags": {
-                "[concat('hidden-related:', parameters('serverfarms_main_id')]": "empty"
+                "[concat('hidden-related:', variables('serverfarms_main_id'))]": "empty"
             },
             "properties": {
                 "netFrameworkVersion": "v5.0",
-                "publishingUsername": "[concat('$', parameters('sites_default_name_azure')]",
+                "publishingUsername": "[concat('$', parameters('sites_default_name_azure'))]",
                 "use32BitWorkerProcess": true,
                 "webSocketsEnabled": true,
                 "alwaysOn": true,
@@ -140,7 +144,7 @@
                 ],
                 "http20Enabled": true
             }
-        },        
+        },
         {
             "type": "Microsoft.Web/sites/siteextensions",
             "apiVersion": "2018-11-01",
@@ -171,7 +175,7 @@
                         "hostType": "Repository"
                     }
                 ],
-                "serverFarmId": "[parameters('serverfarms_main_id')]"
+                "serverFarmId": "[variables('serverfarms_main_id')]"
             }
         },
         {
@@ -196,8 +200,8 @@
                 "[resourceId('Microsoft.Web/sites', variables('sites_core_x64_name'))]"
             ],
             "properties": {
-                "netFrameworkVersion": "v5.0"
-                "publishingUsername": "[concat('$', variables('sites_core_x64_name')]",
+                "netFrameworkVersion": "v5.0",
+                "publishingUsername": "[concat('$', variables('sites_core_x64_name'))]",
                 "use32BitWorkerProcess": false,
                 "webSocketsEnabled": true,
                 "alwaysOn": false,
@@ -251,7 +255,7 @@
                         "hostType": "Repository"
                     }
                 ],
-                "serverFarmId": "[parameters('serverfarms_unstable_id')]"
+                "serverFarmId": "[variables('serverfarms_unstable_id')]"
             }
         },
         {
@@ -277,7 +281,7 @@
             ],
             "properties": {
                 "netFrameworkVersion": "v5.0",
-                "publishingUsername": "[concat('$', variables('sites_core_x64_profiled_name')]",
+                "publishingUsername": "[concat('$', variables('sites_core_x64_profiled_name'))]",
                 "use32BitWorkerProcess": false,
                 "webSocketsEnabled": true,
                 "alwaysOn": false,
@@ -331,7 +335,7 @@
                         "hostType": "Repository"
                     }
                 ],
-                "serverFarmId": "[parameters('serverfarms_main_id')]"
+                "serverFarmId": "[variables('serverfarms_main_id')]"
             }
         },
         {
@@ -357,7 +361,7 @@
             ],
             "properties": {
                 "netFrameworkVersion": "v4.0",
-                "publishingUsername": "[concat('$', variables('sites_netfx_name')]",
+                "publishingUsername": "[concat('$', variables('sites_netfx_name'))]",
                 "use32BitWorkerProcess": true,
                 "webSocketsEnabled": true,
                 "alwaysOn": false,
