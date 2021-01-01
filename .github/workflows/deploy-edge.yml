@@ -17,8 +17,13 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         enable-AzPSSession: true
 
-    - run: ./Update-CertificateThumbprint.ps1 ./app-services/parameters-edge.json
-      shell: pwsh
+    - uses: azure/powershell@v1
+      name: ./Update-CertificateThumbprint.ps1
+      with:
+        inlineScript: |
+          $ErrorActionPreference = 'Stop'
+          ./Update-CertificateThumbprint.ps1 ./app-services/parameters-edge.json
+        azPSVersion: '3.1.0'
 
     - uses: azure/arm-deploy@v1
       with:
