@@ -1,0 +1,53 @@
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/deploy-app-services.yml'
+      - 'app-services/**'
+
+name: Deploy App Services
+
+jobs:
+  deploy:
+    name: Deploy to Azure
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@main
+
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        enable-AzPSSession: true
+
+    - name: Run ./app-services/Update-CertificateThumbprint.ps1
+      uses: azure/powershell@v1
+      with:
+        inlineScript: |
+          $ErrorActionPreference = 'Stop'
+          ./app-services/Update-CertificateThumbprint.ps1 ./app-services/parameters-edge.json
+          ./app-services/Update-CertificateThumbprint.ps1 ./app-services/parameters-main.json
+        azPSVersion: '3.1.0'
+
+    - name: 'Edge: Run azure/arm-deploy@v1'
+      uses: azure/arm-deploy@v1
+      with:
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
+        template: ./app-services/template.json
+        parameters: ./app-services/parameters-edge.json
+
+    - name: 'Edge: Run ./app-services/Test-AppServices.ps1'
+      run: ./app-services/Test-AppServices.ps1 ./app-services/parameters-edge.json
+      shell: pwsh
+
+    - uses: 'Main: azure/arm-deploy@v1'
+      with:
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
+        template: ./app-services/template.json
+        parameters: ./app-services/parameters-main.json
+
+    - name: 'Main: Run ./app-services/Test-AppServices.ps1'
+      run: ./app-services/Test-AppServices.ps1 ./app-services/parameters-main.json
+      shell: pwsh
