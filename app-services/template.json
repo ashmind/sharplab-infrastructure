@@ -72,6 +72,9 @@
             "apiVersion": "2018-11-01",
             "name": "[parameters('sites_default_name_azure')]",
             "location": "East US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Insights/components', variables('components_insights_name'))]"
+            ],
             "tags": {
                 "[concat('hidden-related:', variables('serverfarms_main_id'))]": "empty"
             },
@@ -96,7 +99,26 @@
                         "hostType": "Repository"
                     }
                 ],
-                "serverFarmId": "[variables('serverfarms_main_id')]"
+                "serverFarmId": "[variables('serverfarms_main_id')]",
+                "siteConfig": {
+                    "netFrameworkVersion": "v5.0",
+                    "publishingUsername": "[concat('$', parameters('sites_default_name_azure'))]",
+                    "use32BitWorkerProcess": true,
+                    "webSocketsEnabled": true,
+                    "alwaysOn": true,
+                    "managedPipelineMode": "Integrated",
+                    "http20Enabled": true,
+                    "appSettings": [
+                        {
+                            "name": "SHARPLAB_WEBAPP_NAME",
+                            "value": "[parameters('sites_default_name_azure')]"
+                        },
+                        {
+                            "name": "SHARPLAB_TELEMETRY_KEY",
+                            "value": "[reference(resourceId('Microsoft.Insights/components', variables('components_insights_name')), '2015-05-01', 'Full').properties.InstrumentationKey]"
+                        }
+                    ]
+                }
             }
         },
         {
@@ -126,52 +148,6 @@
             "properties": {
                 "siteName": "[parameters('sites_default_name_azure')]",
                 "hostNameType": "Verified"
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/config",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_default_name_azure'), '/web')]",
-            "location": "East US",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_default_name_azure'))]"
-            ],
-            "tags": {
-                "[concat('hidden-related:', variables('serverfarms_main_id'))]": "empty"
-            },
-            "properties": {
-                "netFrameworkVersion": "v5.0",
-                "publishingUsername": "[concat('$', parameters('sites_default_name_azure'))]",
-                "use32BitWorkerProcess": true,
-                "webSocketsEnabled": true,
-                "alwaysOn": true,
-                "managedPipelineMode": "Integrated",
-                "virtualApplications": [
-                    {
-                        "virtualPath": "/",
-                        "physicalPath": "site\\wwwroot",
-                        "preloadEnabled": true
-                    }
-                ],
-                "ipSecurityRestrictions": [
-                    {
-                        "ipAddress": "Any",
-                        "action": "Allow",
-                        "priority": 1,
-                        "name": "Allow all",
-                        "description": "Allow all access"
-                    }
-                ],
-                "scmIpSecurityRestrictions": [
-                    {
-                        "ipAddress": "Any",
-                        "action": "Allow",
-                        "priority": 1,
-                        "name": "Allow all",
-                        "description": "Allow all access"
-                    }
-                ],
-                "http20Enabled": true
             }
         },
         {

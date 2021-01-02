@@ -7,9 +7,14 @@ $ErrorActionPreference = 'Stop'
 
 $parameters = ConvertFrom-Json (Get-Content $ParametersPath -Raw)
 
-$publicSiteStatusUrl = "https://$($parameters.parameters.sites_default_name_public.value)/status"
-Write-Output "GET $publicSiteStatusUrl"
-Invoke-RestMethod $publicSiteStatusUrl
+@(
+    '',
+    '/status'
+) | % {
+    $url = "https://$($parameters.parameters.sites_default_name_public.value)$_"
+    Write-Output "GET $url"
+    Invoke-RestMethod $url
+}
 
 @(
     "core-x64",
@@ -17,7 +22,7 @@ Invoke-RestMethod $publicSiteStatusUrl
     "netfx",
     "netfx-x64"
 ) | % {
-    $statusUrl = "https://$($parameters.parameters.sites_architecture_prefix.value)$_.azurewebsites.net/status"
-    Write-Output "GET $statusUrl"
-    Invoke-RestMethod $statusUrl
+    $url = "https://$($parameters.parameters.sites_architecture_prefix.value)$_.azurewebsites.net/status"
+    Write-Output "GET $url"
+    Invoke-RestMethod $url
 }
