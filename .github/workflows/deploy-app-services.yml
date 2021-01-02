@@ -38,7 +38,8 @@ jobs:
         parameters: './app-services/parameters-edge.json
           sites_default_assets_reload_token=${{ secrets.SHARPLAB_ASSETS_RELOAD_TOKEN_EDGE }}
           sites_default_github_client_id=${{ secrets.SHARPLAB_GITHUB_CLIENT_ID_EDGE }}
-          sites_default_github_client_secret=${{ secrets.SHARPLAB_GITHUB_CLIENT_SECRET_EDGE }}'
+          sites_default_github_client_secret=${{ secrets.SHARPLAB_GITHUB_CLIENT_SECRET_EDGE }}
+          sites_default_lets_encrypt=${{ secrets.AZURE_LETS_ENCRYPT }}'
 
     - name: '[Edge] Run ./app-services/Test-AppServices.ps1'
       run: ./app-services/Test-AppServices.ps1 ./app-services/parameters-edge.json
@@ -53,7 +54,8 @@ jobs:
         parameters: './app-services/parameters-main.json
               sites_default_assets_reload_token=${{ secrets.SHARPLAB_ASSETS_RELOAD_TOKEN_MAIN }}
               sites_default_github_client_id=${{ secrets.SHARPLAB_GITHUB_CLIENT_ID_MAIN }}
-              sites_default_github_client_secret=${{ secrets.SHARPLAB_GITHUB_CLIENT_SECRET_MAIN }}'
+              sites_default_github_client_secret=${{ secrets.SHARPLAB_GITHUB_CLIENT_SECRET_MAIN }}
+              sites_default_lets_encrypt=${{ secrets.AZURE_LETS_ENCRYPT }}'
 
     - name: '[Main] Run ./app-services/Test-AppServices.ps1'
       run: ./app-services/Test-AppServices.ps1 ./app-services/parameters-main.json
