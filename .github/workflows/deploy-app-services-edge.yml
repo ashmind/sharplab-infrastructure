@@ -21,7 +21,7 @@ jobs:
         enable-AzPSSession: true
 
     - uses: azure/powershell@v1
-      name: Run ./Update-CertificateThumbprint.ps1
+      name: Run ./app-services/Update-CertificateThumbprint.ps1
       with:
         inlineScript: |
           $ErrorActionPreference = 'Stop'
