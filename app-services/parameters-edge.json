@@ -11,6 +11,9 @@
         "sites_default_certificate_thumbprint": {
             "value": "(inserted by Update-CertificateThumbprint.ps1)"
         },
+        "sites_default_assets_base_url": {
+            "value": "https://sharplab.azureedge.net/edge"
+        },
         "sites_architecture_prefix": {
             "value": "sl-a-edge-"
         },
