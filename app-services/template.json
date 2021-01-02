@@ -11,6 +11,9 @@
         "sites_default_assets_base_url": {
             "type": "String"
         },
+        "sites_default_assets_reload_token": {
+            "type": "String"
+        },
         "sites_default_certificate_thumbprint": {
             "type": "String"
         },
@@ -123,6 +126,10 @@
                         {
                             "name": "SHARPLAB_ASSETS_BASE_URL",
                             "value": "[parameters('sites_default_assets_base_url')]"
+                        },
+                        {
+                            "name": "SHARPLAB_ASSETS_RELOAD_TOKEN",
+                            "value": "[parameters('sites_default_assets_reload_token')]"
                         }
                     ]
                 }

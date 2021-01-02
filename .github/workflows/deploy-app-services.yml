@@ -35,7 +35,7 @@ jobs:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
         template: ./app-services/template.json
-        parameters: ./app-services/parameters-edge.json
+        parameters: ./app-services/parameters-edge.json sites_default_assets_reload_token=${{ secrets.SHARPLAB_ASSETS_RELOAD_TOKEN_EDGE }}
 
     - name: '[Edge] Run ./app-services/Test-AppServices.ps1'
       run: ./app-services/Test-AppServices.ps1 ./app-services/parameters-edge.json
@@ -47,7 +47,7 @@ jobs:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
         template: ./app-services/template.json
-        parameters: ./app-services/parameters-main.json
+        parameters: ./app-services/parameters-main.json sites_default_assets_reload_token=${{ secrets.SHARPLAB_ASSETS_RELOAD_TOKEN_MAIN }}
 
     - name: '[Main] Run ./app-services/Test-AppServices.ps1'
       run: ./app-services/Test-AppServices.ps1 ./app-services/parameters-main.json
