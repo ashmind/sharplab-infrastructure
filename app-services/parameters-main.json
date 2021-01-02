@@ -3,16 +3,16 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "sites_default_name_azure": {
-            "value": "sharplab-edge"
+            "value": "sharplab"
         },
         "sites_default_name_public": {
-            "value": "edge.sharplab.io"
+            "value": "sharplab.io"
         },
         "sites_default_certificate_thumbprint": {
             "value": "(inserted by Update-CertificateThumbprint.ps1)"
         },
         "sites_architecture_prefix": {
-            "value": "sl-a-edge-"
+            "value": "sl-a-"
         },
         "serverfarms_main_name": {
             "value": "SharpLab-Main"
