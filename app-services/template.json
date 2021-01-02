@@ -20,8 +20,17 @@
         "sites_default_github_client_secret": {
             "type": "String"
         },
-        "sites_default_lets_encrypt": {
-            "type": "Object"
+        "sites_default_letsencrypt_tenant": {
+            "type": "String"
+        },
+        "sites_default_letsencrypt_clientId": {
+            "type": "String"
+        },
+        "sites_default_letsencrypt_clientSecret": {
+            "type": "String"
+        },
+        "sites_default_letsencrypt_connectionString": {
+            "type": "String"
         },
         "sites_default_certificate_thumbprint": {
             "type": "String"
@@ -150,15 +159,15 @@
                         },
                         {
                             "name": "letsencrypt:Tenant",
-                            "value": "[parameters('sites_default_lets_encrypt').Tenant]"
+                            "value": "[parameters('sites_default_letsencrypt_tenant')]"
                         },
                         {
                             "name": "letsencrypt:ClientId",
-                            "value": "[parameters('sites_default_lets_encrypt').ClientId]"
+                            "value": "[parameters('sites_default_letsencrypt_clientId')]"
                         },
                         {
                             "name": "letsencrypt:ClientSecret",
-                            "value": "[parameters('sites_default_lets_encrypt').ClientSecret]"
+                            "value": "[parameters('sites_default_letsencrypt_clientSecret')]"
                         },
                         {
                             "name": "letsencrypt:ResourceGroupName",
@@ -180,12 +189,12 @@
                     "connectionStrings": [
                         {
                             "name": "AzureWebJobsDashboard",
-                            "connectionString": "[parameters('sites_default_lets_encrypt').AzureWebJobsDashboard]",
+                            "connectionString": "[parameters('sites_default_letsencrypt_connectionString')]",
                             "type": "Custom"
                         },
                         {
                             "name": "AzureWebJobsStorage",
-                            "connectionString": "[parameters('sites_default_lets_encrypt').AzureWebJobsStorage]",
+                            "connectionString": "[parameters('sites_default_letsencrypt_connectionString')]",
                             "type": "Custom"
                         }
                     ]
