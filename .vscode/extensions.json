@@ -1,6 +1,7 @@
 {
 	"recommendations": [
         "msazurermtools.azurerm-vscode-tools",
-        "ms-vscode.powershell"
+        "ms-vscode.powershell",
+        "redhat.vscode-yaml"
 	]
 }

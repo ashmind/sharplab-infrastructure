@@ -25,7 +25,7 @@ jobs:
       with:
         inlineScript: |
           $ErrorActionPreference = 'Stop'
-          ./Update-CertificateThumbprint.ps1 ./app-services/parameters-edge.json
+          ./app-services/Update-CertificateThumbprint.ps1 ./app-services/parameters-edge.json
         azPSVersion: '3.1.0'
 
     - uses: azure/arm-deploy@v1
@@ -34,3 +34,6 @@ jobs:
         resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
         template: ./app-services/template.json
         parameters: ./app-services/parameters-edge.json
+
+    - run: ./app-services/Test-AppServices.ps1 ./app-services/parameters-edge.json
+      shell: pwsh

@@ -29,3 +29,6 @@ jobs:
         resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
         template: ./app-services/template.json
         parameters: ./app-services/parameters-main.json
+
+    - run: ./app-services/Test-AppServices.ps1 ./app-services/parameters-main.json
+      shell: pwsh
