@@ -12,7 +12,7 @@
             "value": "(inserted by Update-CertificateThumbpint.ps1)"
         },
         "sites_architecture_prefix": {
-            "value": "sl-a-edge"
+            "value": "sl-a-edge-"
         },
         "serverfarms_main_name": {
             "value": "SharpLab-Main"
