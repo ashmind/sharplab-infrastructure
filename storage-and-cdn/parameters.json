@@ -5,7 +5,10 @@
         "profiles_cdn_name": {
             "value": "SharpLab-CDN"
         },
-        "storageAccounts_branches_name": {
+        "storageAccounts_primary_name": {
+            "value": "sharplab"
+        },
+        "storageAccounts_legacy_branches_name": {
             "value": "slbs"
         }
     }
