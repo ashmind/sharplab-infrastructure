@@ -43,6 +43,12 @@
                 "serverFarmId": "[variables('serverfarms_main_id')]",
                 "use32BitWorkerProcess": true,
                 "netFrameworkVersion": "v4.0"
+            },
+            {
+                "name": "[concat(parameters('sites_architecture_prefix'), 'netfx-x64')]",
+                "serverFarmId": "[variables('serverfarms_main_id')]",
+                "use32BitWorkerProcess": false,
+                "netFrameworkVersion": "v4.0"
             }
         ]
     },
