@@ -5,8 +5,8 @@
         "profiles_cdn_name": {
             "value": "SharpLab-CDN"
         },
-        "storageAccounts_primary_name": {
-            "value": "sharplab"
+        "storageAccounts_public_name": {
+            "value": "sl-public"
         },
         "storageAccounts_legacy_branches_name": {
             "value": "slbs"

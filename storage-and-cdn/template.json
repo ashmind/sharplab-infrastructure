@@ -5,7 +5,7 @@
         "profiles_cdn_name": {
             "type": "String"
         },
-        "storageAccounts_primary_name": {
+        "storageAccounts_public_name": {
             "type": "String"
         },
         "storageAccounts_legacy_branches_name": {
@@ -13,7 +13,7 @@
         }
     },
     "variables": {
-        "storageAccounts_primary_hostName": "[concat(parameters('storageAccounts_primary_name'), '.blob.core.windows.net')]",
+        "storageAccounts_public_hostName": "[concat(parameters('storageAccounts_public_name'), '.blob.core.windows.net')]",
         "storageAccounts_legacy_branches_hostName": "[concat(parameters('storageAccounts_legacy_branches_name'), '.blob.core.windows.net')]",
         "blobServices_cors": {
             "corsRules": [
@@ -82,7 +82,7 @@
         {
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2019-06-01",
-            "name": "[parameters('storageAccounts_primary_name')]",
+            "name": "[parameters('storageAccounts_public_name')]",
             "location": "eastus",
             "sku": {
                 "name": "Standard_LRS",
@@ -97,9 +97,9 @@
         {
             "type": "Microsoft.Storage/storageAccounts/blobServices",
             "apiVersion": "2019-06-01",
-            "name": "[concat(parameters('storageAccounts_primary_name'), '/default')]",
+            "name": "[concat(parameters('storageAccounts_public_name'), '/default')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_primary_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_public_name'))]"
             ],
             "sku": {
                 "name": "Standard_LRS",
@@ -115,24 +115,10 @@
         {
             "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
             "apiVersion": "2019-06-01",
-            "name": "[concat(parameters('storageAccounts_primary_name'), '/default/main')]",
+            "name": "[concat(parameters('storageAccounts_public_name'), '/default/assets')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_primary_name'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_primary_name'))]"
-            ],
-            "properties": {
-                "defaultEncryptionScope": "$account-encryption-key",
-                "denyEncryptionScopeOverride": false,
-                "publicAccess": "Blob"
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-            "apiVersion": "2019-06-01",
-            "name": "[concat(parameters('storageAccounts_primary_name'), '/default/edge')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_primary_name'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_primary_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_public_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_public_name'))]"
             ],
             "properties": {
                 "defaultEncryptionScope": "$account-encryption-key",
@@ -223,20 +209,20 @@
         {
             "type": "Microsoft.Cdn/profiles/endpoints",
             "apiVersion": "2020-04-15",
-            "name": "[concat(parameters('profiles_cdn_name'), '/', parameters('storageAccounts_primary_name'))]",
+            "name": "[concat(parameters('profiles_cdn_name'), '/', parameters('storageAccounts_public_name'))]",
             "location": "WestUs",
             "dependsOn": [
                 "[resourceId('Microsoft.Cdn/profiles', parameters('profiles_cdn_name'))]"
             ],
             "properties": {
-                "originHostHeader": "[variables('storageAccounts_primary_hostName')]",
+                "originHostHeader": "[variables('storageAccounts_public_hostName')]",
                 "isCompressionEnabled": true,
                 "contentTypesToCompress": "[variables('endpoints_contentTypesToCompress')]",
                 "origins": [
                     {
-                        "name": "[concat(parameters('storageAccounts_primary_name'), '-blob-core-windows-net')]",
+                        "name": "[concat(parameters('storageAccounts_public_name'), '-blob-core-windows-net')]",
                         "properties": {
-                            "hostName": "[variables('storageAccounts_primary_hostName')]"
+                            "hostName": "[variables('storageAccounts_public_hostName')]"
                         }
                     }
                 ]
