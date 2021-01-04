@@ -8,7 +8,13 @@
         "sites_default_name_public": {
             "type": "String"
         },
+        "sites_default_assets_base_url": {
+            "type": "String"
+        },
         "sites_default_assets_latest_url": {
+            "type": "String"
+        },
+        "sites_default_assets_latest_url_v2": {
             "type": "String"
         },
         "sites_default_assets_reload_token": {
@@ -142,8 +148,16 @@
                             "value": "[reference(resourceId('Microsoft.Insights/components', variables('components_insights_name')), '2015-05-01', 'Full').properties.InstrumentationKey]"
                         },
                         {
+                            "name": "SHARPLAB_ASSETS_BASE_URL",
+                            "value": "[parameters('sites_default_assets_base_url')]"
+                        },
+                        {
                             "name": "SHARPLAB_ASSETS_LATEST_URL",
                             "value": "[parameters('sites_default_assets_latest_url')]"
+                        },
+                        {
+                            "name": "SHARPLAB_ASSETS_LATEST_URL_V2",
+                            "value": "[parameters('sites_default_assets_latest_url_v2')]"
                         },
                         {
                             "name": "SHARPLAB_ASSETS_RELOAD_TOKEN",

@@ -11,8 +11,14 @@
         "sites_default_certificate_thumbprint": {
             "value": "(inserted by Update-CertificateThumbprint.ps1)"
         },
+        "sites_default_assets_base_url": {
+            "value": "https://slpublic.azureedge.net/assets/"
+        },
         "sites_default_assets_latest_url": {
             "value": "https://slpublic.azureedge.net/assets/latest-edge"
+        },
+        "sites_default_assets_latest_url_v2": {
+            "value": "https://slpublic.blob.core.windows.net/assets/latest-edge"
         },
         "sites_architecture_prefix": {
             "value": "sl-a-edge-"
