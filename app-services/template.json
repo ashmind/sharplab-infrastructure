@@ -138,6 +138,23 @@
                     "alwaysOn": true,
                     "managedPipelineMode": "Integrated",
                     "http20Enabled": true,
+                    "autoHealEnabled": true,
+                    "autoHealRules": {
+                        "triggers": {
+                            "statusCodes": [
+                                {
+                                    "status": 500,
+                                    "subStatus": 32,
+                                    "count": 5,
+                                    "timeInterval": "00:01:00"
+                                }
+                            ]
+                        },
+                        "actions": {
+                            "actionType": "Recycle",
+                            "minProcessExecutionTime": "00:05:00"
+                        }
+                    },
                     "appSettings": [
                         {
                             "name": "SHARPLAB_WEBAPP_NAME",
