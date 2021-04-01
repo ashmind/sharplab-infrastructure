@@ -26,18 +26,6 @@
         "sites_default_github_client_secret": {
             "type": "String"
         },
-        "sites_default_letsencrypt_tenant": {
-            "type": "String"
-        },
-        "sites_default_letsencrypt_clientId": {
-            "type": "String"
-        },
-        "sites_default_letsencrypt_clientSecret": {
-            "type": "String"
-        },
-        "sites_default_letsencrypt_connectionString": {
-            "type": "String"
-        },
         "sites_default_certificate_thumbprint": {
             "type": "String"
         },
@@ -187,46 +175,6 @@
                         {
                             "name": "SHARPLAB_GITHUB_CLIENT_SECRET",
                             "value": "[parameters('sites_default_github_client_secret')]"
-                        },
-                        {
-                            "name": "letsencrypt:Tenant",
-                            "value": "[parameters('sites_default_letsencrypt_tenant')]"
-                        },
-                        {
-                            "name": "letsencrypt:ClientId",
-                            "value": "[parameters('sites_default_letsencrypt_clientId')]"
-                        },
-                        {
-                            "name": "letsencrypt:ClientSecret",
-                            "value": "[parameters('sites_default_letsencrypt_clientSecret')]"
-                        },
-                        {
-                            "name": "letsencrypt:ResourceGroupName",
-                            "value": "[resourceGroup().name]"
-                        },
-                        {
-                            "name": "letsencrypt:ServicePlanResourceGroupName",
-                            "value": "[resourceGroup().name]"
-                        },
-                        {
-                            "name": "letsencrypt:SiteSlot",
-                            "value": ""
-                        },
-                        {
-                            "name": "letsencrypt:UseIPBasedSSL",
-                            "value": "false"
-                        }
-                    ],
-                    "connectionStrings": [
-                        {
-                            "name": "AzureWebJobsDashboard",
-                            "connectionString": "[parameters('sites_default_letsencrypt_connectionString')]",
-                            "type": "Custom"
-                        },
-                        {
-                            "name": "AzureWebJobsStorage",
-                            "connectionString": "[parameters('sites_default_letsencrypt_connectionString')]",
-                            "type": "Custom"
                         }
                     ]
                 }
@@ -260,15 +208,6 @@
                 "siteName": "[parameters('sites_default_name_azure')]",
                 "hostNameType": "Verified"
             }
-        },
-        {
-            "type": "Microsoft.Web/sites/siteextensions",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_default_name_azure'), '/letsencrypt')]",
-            "location": "East US",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_default_name_azure'))]"
-            ]
         },
 
         {
