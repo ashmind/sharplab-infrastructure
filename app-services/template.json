@@ -54,7 +54,21 @@
                 "name": "[concat(parameters('sites_architecture_prefix'), 'core-x64-profiled')]",
                 "serverFarmId": "[variables('serverfarms_unstable_id')]",
                 "use32BitWorkerProcess": false,
-                "netFrameworkVersion": "v5.0"
+                "netFrameworkVersion": "v5.0",
+                "extraAppSettings": [
+                    {
+                        "name": "CORECLR_ENABLE_PROFILING",
+                        "value": "1"
+                    },
+                    {
+                        "name": "CORECLR_PROFILER",
+                        "value": "{67fb642f-51cd-4745-8b21-aacd2ec74e62}"
+                    },
+                    {
+                        "name": "CORECLR_PROFILER_PATH",
+                        "value": "D:\\home\\site\\wwwroot\\SharpLab.Native.Profiler.dll"
+                    }
+                ]
             },
             {
                 "name": "[concat(parameters('sites_architecture_prefix'), 'netfx')]",
@@ -230,16 +244,19 @@
                     "alwaysOn": false,
                     "managedPipelineMode": "Integrated",
                     "http20Enabled": true,
-                    "appSettings": [
-                        {
-                            "name": "SHARPLAB_WEBAPP_NAME",
-                            "value": "[variables('sites_architectures')[copyIndex()].name]"
-                        },
-                        {
-                            "name": "SHARPLAB_TELEMETRY_KEY",
-                            "value": "[reference(resourceId('Microsoft.Insights/components', variables('components_insights_name')), '2015-05-01', 'Full').properties.InstrumentationKey]"
-                        }
-                    ]
+                    "appSettings": "[concat(
+                        createArray(
+                            createObject(
+                                'name', 'SHARPLAB_WEBAPP_NAME',
+                                'value', variables('sites_architectures')[copyIndex()].name
+                            ),
+                            createObject(
+                                'name', 'SHARPLAB_TELEMETRY_KEY',
+                                'value', reference(resourceId('Microsoft.Insights/components', variables('components_insights_name')), '2015-05-01', 'Full').properties.InstrumentationKey
+                            )
+                        ),
+                        variables('sites_architectures')[copyIndex()].extraAppSettings
+                    )]"
                 }
             },
             "copy": {
