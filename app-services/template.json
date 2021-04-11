@@ -48,7 +48,8 @@
                 "name": "[concat(parameters('sites_architecture_prefix'), 'core-x64')]",
                 "serverFarmId": "[variables('serverfarms_main_id')]",
                 "use32BitWorkerProcess": false,
-                "netFrameworkVersion": "v5.0"
+                "netFrameworkVersion": "v5.0",
+                "extraAppSettings": []
             },
             {
                 "name": "[concat(parameters('sites_architecture_prefix'), 'core-x64-profiled')]",
@@ -74,13 +75,15 @@
                 "name": "[concat(parameters('sites_architecture_prefix'), 'netfx')]",
                 "serverFarmId": "[variables('serverfarms_main_id')]",
                 "use32BitWorkerProcess": true,
-                "netFrameworkVersion": "v4.0"
+                "netFrameworkVersion": "v4.0",
+                "extraAppSettings": []
             },
             {
                 "name": "[concat(parameters('sites_architecture_prefix'), 'netfx-x64')]",
                 "serverFarmId": "[variables('serverfarms_main_id')]",
                 "use32BitWorkerProcess": false,
-                "netFrameworkVersion": "v4.0"
+                "netFrameworkVersion": "v4.0",
+                "extraAppSettings": []
             }
         ]
     },
