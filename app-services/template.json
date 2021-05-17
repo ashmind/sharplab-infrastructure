@@ -34,26 +34,20 @@
         },
         "serverfarms_main_name": {
             "type": "String"
-        },
-        "serverfarms_unstable_name": {
-            "type": "String"
         }
     },
     "variables": {
         "serverfarms_main_id": "[resourceId('Microsoft.Web/serverFarms', parameters('serverfarms_main_name'))]",
-        "serverfarms_unstable_id": "[resourceId('Microsoft.Web/serverFarms', parameters('serverfarms_unstable_name'))]",
         "components_insights_name": "[concat(parameters('sites_default_name_azure'), '-insights')]",
         "sites_architectures": [
             {
                 "name": "[concat(parameters('sites_architecture_prefix'), 'core-x64')]",
-                "serverFarmId": "[variables('serverfarms_main_id')]",
                 "use32BitWorkerProcess": false,
                 "netFrameworkVersion": "v5.0",
                 "extraAppSettings": []
             },
             {
                 "name": "[concat(parameters('sites_architecture_prefix'), 'core-x64-profiled')]",
-                "serverFarmId": "[variables('serverfarms_unstable_id')]",
                 "use32BitWorkerProcess": false,
                 "netFrameworkVersion": "v5.0",
                 "extraAppSettings": [
@@ -73,14 +67,12 @@
             },
             {
                 "name": "[concat(parameters('sites_architecture_prefix'), 'netfx')]",
-                "serverFarmId": "[variables('serverfarms_main_id')]",
                 "use32BitWorkerProcess": true,
                 "netFrameworkVersion": "v4.0",
                 "extraAppSettings": []
             },
             {
                 "name": "[concat(parameters('sites_architecture_prefix'), 'netfx-x64')]",
-                "serverFarmId": "[variables('serverfarms_main_id')]",
                 "use32BitWorkerProcess": false,
                 "netFrameworkVersion": "v4.0",
                 "extraAppSettings": []
@@ -238,7 +230,7 @@
             "kind": "app",
             "properties": {
                 "enabled": true,
-                "serverFarmId": "[variables('sites_architectures')[copyIndex()].serverFarmId]",
+                "serverFarmId": "[variables('serverfarms_main_id')]",
                 "siteConfig": {
                     "netFrameworkVersion": "[variables('sites_architectures')[copyIndex()].netFrameworkVersion]",
                     "publishingUsername": "[concat('$', variables('sites_architectures')[copyIndex()].name)]",

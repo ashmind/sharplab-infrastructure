@@ -25,9 +25,6 @@
         },
         "serverfarms_main_name": {
             "value": "SharpLab-Main"
-        },
-        "serverfarms_unstable_name": {
-            "value": "SharpLab-Unstable"
         }
     }
 }
