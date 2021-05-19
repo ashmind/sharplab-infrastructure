@@ -29,6 +29,15 @@
         "sites_default_certificate_thumbprint": {
             "type": "String"
         },
+        "sites_default_container_experiment_key": {
+            "type": "String"
+        },
+        "sites_container_host_url": {
+            "type": "String"
+        },
+        "sites_container_host_access_token": {
+            "type": "String"
+        },
         "sites_architecture_prefix": {
             "type": "String"
         },
@@ -184,6 +193,18 @@
                         {
                             "name": "SHARPLAB_GITHUB_CLIENT_SECRET",
                             "value": "[parameters('sites_default_github_client_secret')]"
+                        },
+                        {
+                            "name": "SHARPLAB_CONTAINER_EXPERIMENT_KEY",
+                            "value": "[parameters('sites_default_container_experiment_key')]"
+                        },
+                        {
+                            "name": "SHARPLAB_CONTAINER_HOST_URL",
+                            "value": "[parameters('sites_container_host_url')]"
+                        },
+                        {
+                            "name": "SHARPLAB_CONTAINER_HOST_ACCESS_TOKEN",
+                            "value": "[parameters('sites_container_host_access_token')]"
                         }
                     ]
                 }
@@ -248,6 +269,14 @@
                             createObject(
                                 'name', 'SHARPLAB_TELEMETRY_KEY',
                                 'value', reference(resourceId('Microsoft.Insights/components', variables('components_insights_name')), '2015-05-01', 'Full').properties.InstrumentationKey
+                            ),
+                            createObject(
+                                'name', 'SHARPLAB_CONTAINER_HOST_URL',
+                                'value', parameters('sites_container_host_url')
+                            ),
+                            createObject(
+                                'name', 'SHARPLAB_CONTAINER_HOST_ACCESS_TOKEN',
+                                'value', parameters('sites_container_host_access_token')
                             )
                         ),
                         variables('sites_architectures')[copyIndex()].extraAppSettings

@@ -20,6 +20,9 @@
         "sites_default_assets_latest_url_v2": {
             "value": "https://slpublic.blob.core.windows.net/assets/latest-main"
         },
+        "sites_container_host_url": {
+            "value": "http://sharplab-container-host.eastus.cloudapp.azure.com"
+        },
         "sites_architecture_prefix": {
             "value": "sl-a-"
         },
