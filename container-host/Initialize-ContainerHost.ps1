@@ -1,3 +1,13 @@
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", "AdminPassword")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "AdminUserName", Justification = "https://github.com/PowerShell/PSScriptAnalyzer/issues/1472")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "AdminPassword", Justification = "https://github.com/PowerShell/PSScriptAnalyzer/issues/1472")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingCmdletAliases", "ScheduledTask")]
+
+param (
+    [string] $AdminUserName,
+    [string] $AdminPassword
+)
+
 Set-StrictMode -Version 2
 $ErrorActionPreference = 'Stop'
 
@@ -6,8 +16,8 @@ function State() {
     ScheduledTask @{
         Name = 'DockerDesktopStartup'
         Login = @{
-            UserName = $env:CONTAINER_HOST_ADMIN_USERNAME
-            Password = $env:CONTAINER_HOST_ADMIN_PASSWORD
+            UserName = $AdminUserName
+            Password = $AdminPassword
         }
         Trigger = @{
             At = 'Startup'

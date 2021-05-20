@@ -21,9 +21,6 @@ jobs:
 
     - name: "VM: Initialize-ContainerHost.ps1"
       uses: azure/CLI@v1
-      env:
-        CONTAINER_HOST_ADMIN_USERNAME: ${{ secrets.CONTAINER_HOST_ADMIN_USERNAME }}
-        CONTAINER_HOST_ADMIN_PASSWORD: ${{ secrets.CONTAINER_HOST_ADMIN_PASSWORD }}
       with:
         azcliversion: 2.23.0
         inlineScript: |
@@ -31,4 +28,5 @@ jobs:
             --command-id RunPowerShellScript \
             --name sharplab-container-host \
             -g ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --scripts @container-host/Initialize-ContainerHost.ps1
+            --scripts @container-host/Initialize-ContainerHost.ps1 \
+            --parameters "AdminUserName=${{ secrets.CONTAINER_HOST_ADMIN_USERNAME }}" "AdminPassword=${{ secrets.CONTAINER_HOST_ADMIN_PASSWORD }}"
