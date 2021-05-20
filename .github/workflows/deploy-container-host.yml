@@ -31,4 +31,4 @@ jobs:
             --command-id RunPowerShellScript \
             --name sharplab-container-host \
             -g ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --scripts @./contianer-host/Initialize-ContainerHost.ps1
+            --scripts @container-host/Initialize-ContainerHost.ps1
