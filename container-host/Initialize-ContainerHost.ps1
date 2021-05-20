@@ -27,12 +27,17 @@ function State() {
             Execute = 'C:\Program Files\Docker\Docker\Docker Desktop.exe'
         }
     }
+
+    Idempotent {
+        Uninstall-WindowsFeature -Name Windows-Defender
+    }
 }
 
 function ScheduledTask($options) {
     Write-Output "Scheduled Task: $($options.Name)"
     if (Get-ScheduledTask -TaskName $options.Name) {
         Write-Output "- exists, skipped"
+        return
     }
 
     $trigger = New-ScheduledTaskTrigger -AtStartup
@@ -50,6 +55,10 @@ function ScheduledTask($options) {
         -User $options.Login.UserName `
         -Password $options.Login.Password
     Write-Output "- created"
+}
+
+function Idempotent($action) {
+    $action.Invoke()
 }
 
 State
