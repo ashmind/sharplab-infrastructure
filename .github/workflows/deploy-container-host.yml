@@ -1,0 +1,33 @@
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/deploy-container-host.yml'
+      - 'container-host/**'
+
+name: Deploy Container Host
+
+jobs:
+  deploy:
+    name: Deploy to Azure
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@main
+
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - uses: azure/CLI@v1
+      env:
+        CONTAINER_HOST_ADMIN_USERNAME: ${{ secrets.CONTAINER_HOST_ADMIN_USERNAME }}
+        CONTAINER_HOST_ADMIN_PASSWORD: ${{ secrets.CONTAINER_HOST_ADMIN_PASSWORD }}
+      with:
+        azcliversion: 2.23.0
+        inlineScript: >
+          az vm run-command invoke
+            --command-id RunPowerShellScript
+            --name sharplab-container-host
+            -g ${{ secrets.AZURE_RESOURCE_GROUP }}
+            --scripts @./contianer-host/Initialize-ContainerHost.ps1
