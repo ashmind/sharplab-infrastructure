@@ -19,6 +19,7 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+    # TODO: Fail build if this fails -- currently it always reports success
     - name: "VM: Initialize-ContainerHost.ps1"
       uses: azure/CLI@v1
       with:

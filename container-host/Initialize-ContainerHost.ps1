@@ -13,6 +13,14 @@ $ErrorActionPreference = 'Stop'
 
 # Home-made DSC :)
 function State() {
+    # TODO:
+    # 1. Enable IIS
+    # 2. Install .NET 5
+    # 3. Install Docker Desktop
+    # 4. Pull MS container
+    # 5. Setup IIS (website)
+    # 6. Give AppPool permissions to Docker pipe
+
     ScheduledTask @{
         Name = 'DockerDesktopStartup'
         Login = @{
