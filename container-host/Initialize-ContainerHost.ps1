@@ -37,6 +37,7 @@ function State() {
     }
 
     Idempotent {
+        Write-Output "Unistall: Windows-Defender"
         Uninstall-WindowsFeature -Name Windows-Defender
     }
 }

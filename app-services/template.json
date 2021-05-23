@@ -29,7 +29,7 @@
         "sites_default_certificate_thumbprint": {
             "type": "String"
         },
-        "sites_default_container_experiment_key": {
+        "sites_container_experiment_key": {
             "type": "String"
         },
         "sites_container_host_url": {
@@ -196,7 +196,7 @@
                         },
                         {
                             "name": "SHARPLAB_CONTAINER_EXPERIMENT_KEY",
-                            "value": "[parameters('sites_default_container_experiment_key')]"
+                            "value": "[parameters('sites_container_experiment_key')]"
                         },
                         {
                             "name": "SHARPLAB_CONTAINER_HOST_URL",
@@ -269,6 +269,10 @@
                             createObject(
                                 'name', 'SHARPLAB_TELEMETRY_KEY',
                                 'value', reference(resourceId('Microsoft.Insights/components', variables('components_insights_name')), '2015-05-01', 'Full').properties.InstrumentationKey
+                            ),
+                            createObject(
+                                'name', 'SHARPLAB_CONTAINER_EXPERIMENT_KEY',
+                                'value', parameters('sites_container_experiment_key')
                             ),
                             createObject(
                                 'name', 'SHARPLAB_CONTAINER_HOST_URL',
