@@ -5,7 +5,8 @@
 
 param (
     [string] $AdminUserName,
-    [string] $AdminPassword
+    [string] $AdminPassword,
+    [string] $TelemetryKey
 )
 
 Set-StrictMode -Version 2
@@ -20,6 +21,10 @@ function State() {
     # 4. Pull MS container
     # 5. Setup IIS (website)
     # 6. Give AppPool permissions to Docker pipe
+
+    EnvironmentVariables @{
+        SHARPLAB_TELEMETRY_KEY = $TelemetryKey
+    }
 
     ScheduledTask @{
         Name = 'DockerDesktopStartup'
@@ -45,7 +50,7 @@ function State() {
 function ScheduledTask($options) {
     Write-Output "Scheduled Task: $($options.Name)"
     if (Get-ScheduledTask -TaskName $options.Name) {
-        Write-Output "- exists, skipped"
+        Write-Output "  - exists, skipped"
         return
     }
 
@@ -63,11 +68,19 @@ function ScheduledTask($options) {
         -Settings $settings `
         -User $options.Login.UserName `
         -Password $options.Login.Password
-    Write-Output "- created"
+    Write-Output "  - created"
 }
 
 function Idempotent($action) {
     $action.Invoke()
+}
+
+function EnvironmentVariables($variables) {
+    Write-Output "Environment Variables:"
+    $variables.GetEnumerator() | % {
+        Write-Output "  - $($_.Key)"
+        [Environment]::SetEnvironmentVariable($_.Key, $_.Value, [EnvironmentVariableTarget]::Machine)
+    }
 }
 
 State
