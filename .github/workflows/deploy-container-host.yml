@@ -36,7 +36,7 @@ jobs:
         azcliversion: 2.23.0
         inlineScript: |
           az config set extension.use_dynamic_install=yes_without_prompt
-          telemetry_key = $(az monitor app-insights component show \
+          telemetry_key=$(az monitor app-insights component show \
             --app sharplab-container-host-insights \
             -g ${{ secrets.AZURE_RESOURCE_GROUP }} \
             --query instrumentationKey \
