@@ -19,6 +19,18 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+    - uses: azure/arm-deploy@v1
+      with:
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
+        template: ./container-host/template.json
+        parameters: ./container-host/parameters.json
+
+    - run: './container-host/Get-ContainerHostTelemetryKey.ps1'
+      id: get_telemetry_key
+      env:
+        ResourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
+
     # TODO: Fail build if this fails -- currently it always reports success
     - name: "VM: Initialize-ContainerHost.ps1"
       uses: azure/CLI@v1
@@ -32,4 +44,4 @@ jobs:
             --scripts @container-host/Initialize-ContainerHost.ps1 \
             --parameters "AdminUserName=${{ secrets.CONTAINER_HOST_ADMIN_USERNAME }}" \
                          "AdminPassword=${{ secrets.CONTAINER_HOST_ADMIN_PASSWORD }}" \
-                         "TelemetryKey=${{ secrets.CONTAINER_HOST_SHARPLAB_TELEMETRY_KEY_EDGE }}"
+                         "TelemetryKey=${{ steps.get_telemetry_key.outputs.telemetry_key }}"
