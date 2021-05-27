@@ -5,6 +5,12 @@
     "variables": {
         "components_insights_name": "sharplab-container-host-insights"
     },
+    "outputs": {
+        "telemetry_key": {
+            "type": "string",
+            "value": "[reference(resourceId('Microsoft.Insights/components', variables('components_insights_name')), '2015-05-01', 'Full').properties.InstrumentationKey]"
+        }
+    },
     "resources": [
         {
             "type": "microsoft.insights/components",
