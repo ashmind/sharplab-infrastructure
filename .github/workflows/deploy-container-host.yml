@@ -27,6 +27,23 @@ jobs:
         template: ./container-host/template.json
         parameters: ./container-host/parameters.json
 
+    # Has to be a separate step, as using template outputs for this
+    # exposes value in the log: https://github.com/Azure/arm-deploy/issues/47
+    - name: 'Run az monitor app-insights component show'
+      uses: azure/CLI@v1
+      id: get_telemetry_key
+      with:
+        azcliversion: 2.23.0
+        inlineScript: |
+          az config set extension.use_dynamic_install=yes_without_prompt
+          telemetry_key = $(az monitor app-insights component show \
+            --app sharplab-container-host-insights \
+            -g ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --query instrumentationKey \
+            --output tsv)
+          echo ::add-mask::$telemetry_key
+          echo ::set-output name=telemetry_key::$telemetry_key
+
     # TODO: Fail build if this fails -- currently it always reports success
     - name: "VM: Initialize-ContainerHost.ps1"
       uses: azure/CLI@v1
@@ -40,4 +57,4 @@ jobs:
             --scripts @container-host/Initialize-ContainerHost.ps1 \
             --parameters "AdminUserName=${{ secrets.CONTAINER_HOST_ADMIN_USERNAME }}" \
                          "AdminPassword=${{ secrets.CONTAINER_HOST_ADMIN_PASSWORD }}" \
-                         "TelemetryKey=${{ steps.arm_deploy.outputs.telemetry_key }}"
+                         "TelemetryKey=${{ steps.get_telemetry_key.outputs.telemetry_key }}"
