@@ -26,10 +26,19 @@ jobs:
         template: ./container-host/template.json
         parameters: ./container-host/parameters.json
 
-    - run: './container-host/Get-ContainerHostTelemetryKey.ps1'
+    - name: 'Run az monitor app-insights component show'
+      uses: azure/CLI@v1
       id: get_telemetry_key
-      env:
-        ResourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
+      with:
+        azcliversion: 2.23.0
+        inlineScript: |
+          telemetry_key = $(az monitor app-insights component show \
+            --app sharplab-container-host-insights \
+            -g ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --query instrumentationKey \
+            --output tsv)
+          echo ::add-mask::$telemetry_key
+          echo ::set-output name=telemetry_key::$telemetry_key
 
     # TODO: Fail build if this fails -- currently it always reports success
     - name: "VM: Initialize-ContainerHost.ps1"
