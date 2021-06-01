@@ -25,7 +25,8 @@ jobs:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
         template: ./container-host/template.json
-        parameters: ./container-host/parameters.json
+        parameters: './container-host/parameters.json
+          virtualMachines_adminUsername=${{ secrets.CONTAINER_HOST_ADMIN_USERNAME }}'
 
     # Has to be a separate step, as using template outputs for this
     # exposes value in the log: https://github.com/Azure/arm-deploy/issues/47

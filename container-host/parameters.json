@@ -2,5 +2,17 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "virtualMachines_name": {
+            "value": "sharplab-container-host"
+        },
+        "virtualNetworks_name": {
+            "value": "SharpLab-vnet"
+        },
+        "networkInterfaces_name": {
+            "value": "sharplab-container-h112"
+        },
+        "disks_name": {
+            "value": "sharplab-container-host_disk1_94d270e68340495ea6f148cff310aabb"
+        }
     }
 }
