@@ -207,7 +207,7 @@
                         },
                         {
                             "name": "SHARPLAB_KEY_VAULT_URL",
-                            "value": "[reference(resourceId('Microsoft.KeyVault/vaults', parameters('vaults_name')), '2018-03-01').properties.vaultUri]"
+                            "value": "[reference(resourceId('Microsoft.KeyVault/vaults', parameters('vaults_name')), '2019-09-01').properties.vaultUri]"
                         }
                     ]
                 }
@@ -296,7 +296,7 @@
                             ),
                             createObject(
                                 'name', 'SHARPLAB_KEY_VAULT_URL',
-                                'value', reference(resourceId('Microsoft.KeyVault/vaults', parameters('vaults_name')), '2018-03-01').properties.vaultUri
+                                'value', reference(resourceId('Microsoft.KeyVault/vaults', parameters('vaults_name')), '2019-09-01').properties.vaultUri
                             )
                         ),
                         variables('sites_architectures')[copyIndex()].extraAppSettings
