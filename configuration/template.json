@@ -40,7 +40,7 @@
                 "enabledForTemplateDeployment": false,
                 "enableSoftDelete": true,
                 "softDeleteRetentionInDays": 90,
-                "enableRbacAuthorization": false,
+                "enableRbacAuthorization": true,
                 "vaultUri": "[concat('https://', parameters('vaults_name'), '.vault.azure.net/')]"
             }
         },
