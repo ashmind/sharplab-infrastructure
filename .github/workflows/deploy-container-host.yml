@@ -19,8 +19,7 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - uses: ashmind/arm-deploy@v1
-      id: 'arm_deploy'
+    - uses: ashmind/arm-deploy@main
       with:
         deploymentName: "sharplab-container-host"
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}

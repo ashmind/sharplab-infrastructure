@@ -29,8 +29,8 @@ jobs:
           ./app-services/Update-CertificateThumbprint.ps1 ./app-services/parameters-main.json
         azPSVersion: '3.1.0'
 
-    - name: '[Edge] Run ashmind/arm-deploy@v1'
-      uses: ashmind/arm-deploy@v1
+    - name: '[Edge] Run ashmind/arm-deploy@main'
+      uses: ashmind/arm-deploy@main
       with:
         deploymentName: "sharplab-app-services-edge"
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
@@ -46,8 +46,8 @@ jobs:
       run: ./app-services/Test-AppServices.ps1 ./app-services/parameters-edge.json
       shell: pwsh
 
-    - name: '[Main] Run ashmind/arm-deploy@v1'
-      uses: ashmind/arm-deploy@v1
+    - name: '[Main] Run ashmind/arm-deploy@main'
+      uses: ashmind/arm-deploy@main
       with:
         deploymentName: "sharplab-app-services-main"
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
