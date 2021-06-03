@@ -22,17 +22,16 @@ jobs:
     - uses: azure/arm-deploy@v1
       id: 'arm_deploy'
       with:
+        deploymentName: "sharplab-container-host"
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
         template: ./container-host/template.json
         parameters: './container-host/parameters.json
           virtualMachines_adminUsername=${{ secrets.CONTAINER_HOST_ADMIN_USERNAME }}'
 
-    # Has to be a separate step, as using template outputs for this
-    # exposes value in the log: https://github.com/Azure/arm-deploy/issues/47
-    - name: 'Run az monitor app-insights component show'
+    # TODO: Fail build if this fails -- currently it always reports success
+    - name: "VM: Initialize-ContainerHost.ps1"
       uses: azure/CLI@v1
-      id: get_telemetry_key
       with:
         azcliversion: 2.23.0
         inlineScript: |
@@ -43,14 +42,14 @@ jobs:
             --query instrumentationKey \
             --output tsv)
           echo "::add-mask::${telemetry_key}"
-          echo "::set-output name=telemetry_key::${telemetry_key}"
 
-    # TODO: Fail build if this fails -- currently it always reports success
-    - name: "VM: Initialize-ContainerHost.ps1"
-      uses: azure/CLI@v1
-      with:
-        azcliversion: 2.23.0
-        inlineScript: |
+          authorization_token=$(az keyvault secret show \
+            --name ContainerHostAuthorizationToken \
+            --vault-name sharplab \
+            --query value \
+            --output tsv)
+          echo "::add-mask::${authorization_token}"
+
           az vm run-command invoke \
             --command-id RunPowerShellScript \
             --name sharplab-container-host \
@@ -58,4 +57,5 @@ jobs:
             --scripts @container-host/Initialize-ContainerHost.ps1 \
             --parameters "AdminUserName=${{ secrets.CONTAINER_HOST_ADMIN_USERNAME }}" \
                          "AdminPassword=${{ secrets.CONTAINER_HOST_ADMIN_PASSWORD }}" \
-                         "TelemetryKey=${{ steps.get_telemetry_key.outputs.telemetry_key }}"
+                         "TelemetryKey=${telemetry_key}" \
+                         "AuthorizationToken=${authorization_token}"

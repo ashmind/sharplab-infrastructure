@@ -18,16 +18,16 @@
             "type": "String"
         },
         "sites_default_assets_reload_token": {
-            "type": "String"
+            "type": "SecureString"
         },
         "sites_default_github_client_id": {
-            "type": "String"
+            "type": "SecureString"
         },
         "sites_default_github_client_secret": {
-            "type": "String"
+            "type": "SecureString"
         },
         "sites_default_certificate_thumbprint": {
-            "type": "String"
+            "type": "SecureString"
         },
         "sites_container_experiment_key": {
             "type": "String"
@@ -35,7 +35,7 @@
         "sites_container_host_url": {
             "type": "String"
         },
-        "sites_container_host_access_token": {
+        "vaults_name": {
             "type": "String"
         },
         "sites_architecture_prefix": {
@@ -108,6 +108,9 @@
             "apiVersion": "2018-11-01",
             "name": "[parameters('sites_default_name_azure')]",
             "location": "East US",
+            "identity": {
+                "type": "SystemAssigned"
+            },
             "dependsOn": [
                 "[resourceId('Microsoft.Insights/components', variables('components_insights_name'))]"
             ],
@@ -203,8 +206,8 @@
                             "value": "[parameters('sites_container_host_url')]"
                         },
                         {
-                            "name": "SHARPLAB_CONTAINER_HOST_ACCESS_TOKEN",
-                            "value": "[parameters('sites_container_host_access_token')]"
+                            "name": "SHARPLAB_KEY_VAULT_URL",
+                            "value": "[reference(resourceId('Microsoft.KeyVault/vaults', parameters('vaults_name'))).properties.vaultUri]"
                         }
                     ]
                 }
@@ -237,6 +240,19 @@
             "properties": {
                 "siteName": "[parameters('sites_default_name_azure')]",
                 "hostNameType": "Verified"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2018-09-01-preview",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_default_name_azure'))]"
+            ],
+            "name": "[guid(resourceGroup().id)]",
+            "properties": {
+                // Key Vault Secrets User
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '4633458b-17de-408a-b874-0445c86b69e6')]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('sites_default_name_azure')), '2018-02-01', 'Full').identity.principalId]"
             }
         },
 
@@ -279,8 +295,8 @@
                                 'value', parameters('sites_container_host_url')
                             ),
                             createObject(
-                                'name', 'SHARPLAB_CONTAINER_HOST_ACCESS_TOKEN',
-                                'value', parameters('sites_container_host_access_token')
+                                'name', 'SHARPLAB_KEY_VAULT_URL',
+                                'value', reference(resourceId('Microsoft.KeyVault/vaults', parameters('vaults_name'))).properties.vaultUri
                             )
                         ),
                         variables('sites_architectures')[copyIndex()].extraAppSettings
@@ -306,6 +322,23 @@
             },
             "copy": {
                 "name": "sites_architectures_hostNameBindings_copy",
+                "count": "[length(variables('sites_architectures'))]"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2018-09-01-preview",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('sites_architectures')[copyIndex()].name)]"
+            ],
+            "name": "[guid(resourceGroup().id)]",
+            "properties": {
+                // Key Vault Secrets User
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '4633458b-17de-408a-b874-0445c86b69e6')]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', variables('sites_architectures')[copyIndex()].name), '2018-02-01', 'Full').identity.principalId]"
+            },
+            "copy": {
+                "name": "sites_architectures_roleAssignments_copy",
                 "count": "[length(variables('sites_architectures'))]"
             }
         }

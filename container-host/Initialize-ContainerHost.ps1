@@ -1,12 +1,15 @@
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", "AdminPassword")]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "AdminUserName", Justification = "https://github.com/PowerShell/PSScriptAnalyzer/issues/1472")]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "AdminPassword", Justification = "https://github.com/PowerShell/PSScriptAnalyzer/issues/1472")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "TelemetryKey", Justification = "https://github.com/PowerShell/PSScriptAnalyzer/issues/1472")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "AuthorizationToken", Justification = "https://github.com/PowerShell/PSScriptAnalyzer/issues/1472")]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingCmdletAliases", "ScheduledTask")]
 
 param (
-    [string] $AdminUserName,
-    [string] $AdminPassword,
-    [string] $TelemetryKey
+    [Parameter(Mandatory = $true)] [string] $AdminUserName,
+    [Parameter(Mandatory = $true)] [string] $AdminPassword,
+    [Parameter(Mandatory = $true)] [string] $TelemetryKey,
+    [Parameter(Mandatory = $true)] [string] $AuthorizationToken
 )
 
 Set-StrictMode -Version 2
@@ -24,6 +27,7 @@ function State() {
 
     EnvironmentVariables @{
         SHARPLAB_TELEMETRY_KEY = $TelemetryKey
+        SHARPLAB_CONTAINER_HOST_AUTHORIZATION_TOKEN = $AuthorizationToken
     }
 
     ScheduledTask @{

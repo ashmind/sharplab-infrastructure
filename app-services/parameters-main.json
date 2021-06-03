@@ -28,6 +28,9 @@
         },
         "serverfarms_main_name": {
             "value": "SharpLab-Main"
+        },
+        "vaults_name": {
+            "value": "sharplab"
         }
     }
 }
