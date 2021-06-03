@@ -14,7 +14,7 @@
         {
             "type": "Microsoft.AppConfiguration/configurationStores",
             "apiVersion": "2021-03-01-preview",
-            "name": "[parameters('configurationStores_sharplab_name')]",
+            "name": "[parameters('configurationStores_name')]",
             "location": "eastus",
             "sku": {
                 "name": "free"
