@@ -34,6 +34,7 @@
                     "family": "A",
                     "name": "Standard"
                 },
+                "tenantId": "[subscription().tenantId]",
                 "enabledForDeployment": false,
                 "enabledForDiskEncryption": false,
                 "enabledForTemplateDeployment": false,
