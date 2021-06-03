@@ -1,0 +1,61 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vaults_name": {
+            "type": "String"
+        },
+        "configurationStores_name": {
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.AppConfiguration/configurationStores",
+            "apiVersion": "2021-03-01-preview",
+            "name": "[parameters('configurationStores_sharplab_name')]",
+            "location": "eastus",
+            "sku": {
+                "name": "free"
+            },
+            "properties": {
+                "encryption": {},
+                "disableLocalAuth": false
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2021-04-01-preview",
+            "name": "[parameters('vaults_name')]",
+            "location": "eastus",
+            "properties": {
+                "sku": {
+                    "family": "A",
+                    "name": "Standard"
+                },
+                "enabledForDeployment": false,
+                "enabledForDiskEncryption": false,
+                "enabledForTemplateDeployment": false,
+                "enableSoftDelete": true,
+                "softDeleteRetentionInDays": 90,
+                "enableRbacAuthorization": false,
+                "vaultUri": "[concat('https://', parameters('vaults_name'), '.vault.azure.net/')]"
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('vaults_name'), '/AppConfigConnectionString')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_name'))]",
+                "[resourceId('Microsoft.AppConfiguration/configurationStores', parameters('configurationStores_name'))]"
+            ],
+            "properties": {
+                "value": "[listKeys(
+                    resourceId('Microsoft.AppConfiguration/configurationStores', parameters('configurationStores_name')), '2020-06-01'
+                ).value[2].connectionString]"
+            }
+        }
+    ]
+}
