@@ -261,6 +261,9 @@
             "apiVersion": "2018-11-01",
             "name": "[variables('sites_architectures')[copyIndex()].name]",
             "location": "East US",
+            "identity": {
+                "type": "SystemAssigned"
+            },
             "dependsOn": [
                 "[resourceId('Microsoft.Insights/components', variables('components_insights_name'))]"
             ],
