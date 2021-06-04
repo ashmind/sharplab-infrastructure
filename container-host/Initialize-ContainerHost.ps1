@@ -60,7 +60,11 @@ function ScheduledTask($options) {
         $updated = $false
         if (($action.Execute -ne $options.Action.Execute) -or ($action.Argument -ne $options.Action.Argument)) {
             $action = New-ScheduledTaskAction -Execute $options.Action.Execute -Argument $options.Action.Argument
-            Set-ScheduledTask -TaskName $options.Name -Action $action
+            Set-ScheduledTask `
+                -TaskName $options.Name `
+                -Action $action `
+                -User $options.Login.UserName `
+                -Password $options.Login.Password
             $updated = $true
         }
 
