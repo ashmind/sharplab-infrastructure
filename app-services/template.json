@@ -252,7 +252,7 @@
             "properties": {
                 // Key Vault Secrets User
                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '4633458b-17de-408a-b874-0445c86b69e6')]",
-                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('sites_default_name_azure')), '2018-02-01', 'Full').identity.principalId]"
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('sites_default_name_azure')), '2019-08-01', 'Full').identity.principalId]"
             }
         },
 
@@ -335,7 +335,7 @@
             "properties": {
                 // Key Vault Secrets User
                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '4633458b-17de-408a-b874-0445c86b69e6')]",
-                "principalId": "[reference(resourceId('Microsoft.Web/sites', variables('sites_architectures')[copyIndex()].name), '2018-02-01', 'Full').identity.principalId]"
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', variables('sites_architectures')[copyIndex()].name), '2019-08-01', 'Full').identity.principalId]"
             },
             "copy": {
                 "name": "sites_architectures_roleAssignments_copy",
