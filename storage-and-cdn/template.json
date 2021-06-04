@@ -238,7 +238,7 @@
         {
             "name": "[parameters('storageAccounts_private_name')]",
             "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2021-02-01",
+            "apiVersion": "2021-04-01",
             "location": "eastus",
             "properties": {
                 "accessTier": "Cool",
