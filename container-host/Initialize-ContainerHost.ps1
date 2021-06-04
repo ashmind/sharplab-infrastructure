@@ -42,7 +42,7 @@ function State() {
         }
         Action = @{
             Execute = 'cmd'
-            Argument = '/c start "" "C:\Program Files\Docker\Docker\Docker Desktop.exe"'
+            Arguments = '/c start "" "C:\Program Files\Docker\Docker\Docker Desktop.exe"'
         }
     }
 
@@ -58,8 +58,8 @@ function ScheduledTask($options) {
     if ($existing) {
         $action = $existing.Actions[0]
         $updated = $false
-        if (($action.Execute -ne $options.Action.Execute) -or ($action.Argument -ne $options.Action.Argument)) {
-            $action = New-ScheduledTaskAction -Execute $options.Action.Execute -Argument $options.Action.Argument
+        if (($action.Execute -ne $options.Action.Execute) -or ($action.Arguments -ne $options.Action.Arguments)) {
+            $action = New-ScheduledTaskAction -Execute $options.Action.Execute -Argument $options.Action.Arguments
             Set-ScheduledTask `
                 -TaskName $options.Name `
                 -Action $action `
@@ -80,7 +80,7 @@ function ScheduledTask($options) {
     $trigger = New-ScheduledTaskTrigger -AtStartup
     $trigger.Delay = $options.Trigger.Delay
 
-    $action = New-ScheduledTaskAction -Execute $options.Action.Execute -Argument $options.Action.Argument
+    $action = New-ScheduledTaskAction -Execute $options.Action.Execute -Argument $options.Action.Arguments
 
     $settings = New-ScheduledTaskSettingsSet -Compatibility Win8 -StartWhenAvailable -RestartCount 999
 
