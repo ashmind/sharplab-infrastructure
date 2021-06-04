@@ -41,7 +41,8 @@ function State() {
             Delay = 'PT1M'
         }
         Action = @{
-            Execute = 'C:\Program Files\Docker\Docker\Docker Desktop.exe'
+            Execute = 'cmd'
+            Argument = '/c start "C:\Program Files\Docker\Docker\Docker Desktop.exe"'
         }
     }
 
@@ -61,7 +62,7 @@ function ScheduledTask($options) {
     $trigger = New-ScheduledTaskTrigger -AtStartup
     $trigger.Delay = $options.Trigger.Delay
 
-    $action = New-ScheduledTaskAction -Execute $options.Action.Execute
+    $action = New-ScheduledTaskAction -Execute $options.Action.Execute -Argument $options.Action.Argument
 
     $settings = New-ScheduledTaskSettingsSet -Compatibility Win8 -StartWhenAvailable -RestartCount 999
 
