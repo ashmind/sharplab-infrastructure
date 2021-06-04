@@ -235,7 +235,7 @@
         {
             "name": "[parameters('storageAccounts_private_name')]",
             "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2019-06-01",
+            "apiVersion": "2021-02-01",
             "location": "eastus",
             "properties": {
                 "accessTier": "Cool",
@@ -255,6 +255,11 @@
             },
             "kind": "StorageV2",
             "tags": {}
+        },
+        {
+            "name": "[concat(parameters('storageAccounts_private_name'), 'featureflags')]",
+            "type": "Microsoft.Storage/storageAccounts/tableServices/tables",
+            "apiVersion": "2021-02-01"
         }
     ]
 }
