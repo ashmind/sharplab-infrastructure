@@ -13,6 +13,9 @@
         },
         "storageAccounts_private_name": {
             "value": "slprivate"
+        },
+        "vaults_name": {
+            "value": "sharplab"
         }
     }
 }

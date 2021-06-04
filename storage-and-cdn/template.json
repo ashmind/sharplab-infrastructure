@@ -13,6 +13,9 @@
         },
         "storageAccounts_private_name": {
             "type": "String"
+        },
+        "vaults_name": {
+            "type": "String"
         }
     },
     "variables": {
@@ -257,9 +260,26 @@
             "tags": {}
         },
         {
-            "name": "[concat(parameters('storageAccounts_private_name'), '/featureflags')]",
             "type": "Microsoft.Storage/storageAccounts/tableServices/tables",
-            "apiVersion": "2021-02-01"
+            "apiVersion": "2021-02-01",
+            "name": "[concat(parameters('storageAccounts_private_name'), '/default/featureflags')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_private_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('vaults_name'), '/FeatureFlagStorageKey')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_name'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_private_name'))]"
+            ],
+            "properties": {
+                "value": "[listKeys(
+                    resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_private_name')), '2020-06-01'
+                ).keys[0].value]"
+            }
         }
     ]
 }
