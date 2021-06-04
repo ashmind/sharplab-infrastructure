@@ -272,7 +272,6 @@
             "apiVersion": "2019-09-01",
             "name": "[concat(parameters('vaults_name'), '/FeatureFlagStorageKey')]",
             "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_name'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_private_name'))]"
             ],
             "properties": {
