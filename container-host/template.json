@@ -106,7 +106,8 @@
             "name": "[parameters('virtualMachines_name')]",
             "location": "eastus",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_name'))]"
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_name'))]",
+                "[resourceId('Microsoft.Compute/disks', parameters('disks_name'))]"
             ],
             "properties": {
                 "hardwareProfile": {
@@ -125,7 +126,6 @@
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
                         "managedDisk": {
-                            "storageAccountType": "StandardSSD_LRS",
                             "id": "[resourceId('Microsoft.Compute/disks', parameters('disks_name'))]"
                         },
                         "diskSizeGB": 127
