@@ -42,7 +42,7 @@ function State() {
         }
         Action = @{
             Execute = 'cmd'
-            Argument = '/c start "C:\Program Files\Docker\Docker\Docker Desktop.exe"'
+            Argument = '/c start "" "C:\Program Files\Docker\Docker\Docker Desktop.exe"'
         }
     }
 
