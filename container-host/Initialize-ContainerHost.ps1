@@ -54,7 +54,21 @@ function State() {
 
 function ScheduledTask($options) {
     Write-Output "Scheduled Task: $($options.Name)"
-    if (Get-ScheduledTask -TaskName $options.Name) {
+    $existing = Get-ScheduledTask -TaskName $options.Name
+    if ($existing) {
+        $action = $existing.Actions[0]
+        $updated = $false
+        if (($action.Execute -ne $options.Action.Execute) -or ($action.Argument -ne $options.Action.Argument)) {
+            $action = New-ScheduledTaskAction -Execute $options.Action.Execute -Argument $options.Action.Argument
+            Set-ScheduledTask -TaskName $options.Name -Action $action
+            $updated = $true
+        }
+
+        if ($updated) {
+            Write-Output "  - exists, updated"
+            return
+        }
+
         Write-Output "  - exists, skipped"
         return
     }
