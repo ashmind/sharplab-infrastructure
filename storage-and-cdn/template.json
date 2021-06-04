@@ -257,7 +257,7 @@
             "tags": {}
         },
         {
-            "name": "[concat(parameters('storageAccounts_private_name'), 'featureflags')]",
+            "name": "[concat(parameters('storageAccounts_private_name'), '/featureflags')]",
             "type": "Microsoft.Storage/storageAccounts/tableServices/tables",
             "apiVersion": "2021-02-01"
         }
