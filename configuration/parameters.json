@@ -4,9 +4,6 @@
     "parameters": {
         "vaults_name": {
             "value": "sharplab"
-        },
-        "configurationStores_name": {
-            "value": "sharplab"
         }
     }
 }

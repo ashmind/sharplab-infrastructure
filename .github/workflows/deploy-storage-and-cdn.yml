@@ -19,8 +19,9 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - uses: azure/arm-deploy@v1
+    - uses: ashmind/arm-deploy@main
       with:
+        deploymentName: "sharplab-storage-and-cdn"
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
         template: ./storage-and-cdn/template.json

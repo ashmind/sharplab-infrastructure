@@ -10,6 +10,9 @@
         },
         "storageAccounts_legacy_branches_name": {
             "value": "slbs"
+        },
+        "storageAccounts_private_name": {
+            "value": "slprivate"
         }
     }
 }

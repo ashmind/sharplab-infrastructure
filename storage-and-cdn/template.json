@@ -10,6 +10,9 @@
         },
         "storageAccounts_legacy_branches_name": {
             "type": "String"
+        },
+        "storageAccounts_private_name": {
+            "type": "String"
         }
     },
     "variables": {
@@ -227,6 +230,31 @@
                     }
                 ]
             }
+        },
+
+        {
+            "name": "[parameters('storageAccounts_private_name')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "location": "eastus",
+            "properties": {
+                "accessTier": "Cool",
+                "minimumTlsVersion": "TLS1_2",
+                "supportsHttpsTrafficOnly": true,
+                "allowBlobPublicAccess": false,
+                "allowSharedKeyAccess": false,
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "defaultAction": "Deny",
+                    "ipRules": []
+                }
+            },
+            "dependsOn": [],
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "kind": "StorageV2",
+            "tags": {}
         }
     ]
 }

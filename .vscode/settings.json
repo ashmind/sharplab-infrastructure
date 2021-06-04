@@ -4,6 +4,8 @@
         "letsencrypt",
         "pwsh",
         "serverfarms",
-        "sharplab"
+        "sharplab",
+        "slprivate",
+        "slpublic"
     ]
 }
