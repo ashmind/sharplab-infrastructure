@@ -105,7 +105,7 @@
         {
             "type": "Microsoft.KeyVault/vaults/secrets",
             "apiVersion": "2019-09-01",
-            "name": "[concat(parameters('vaults_name'), '/AppInsightsTelemetryKey')]",
+            "name": "[concat(parameters('vaults_name'), '/AppInsightsInstrumentationKey')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Insights/components', variables('components_insights_name'))]"
             ],
