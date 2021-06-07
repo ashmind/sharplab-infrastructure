@@ -14,8 +14,11 @@
         "storageAccounts_private_name": {
             "value": "slprivate"
         },
-        "vaults_name": {
+        "vaults_main_name": {
             "value": "sharplab"
+        },
+        "vaults_edge_name": {
+            "value": "sharplab-edge"
         }
     }
 }

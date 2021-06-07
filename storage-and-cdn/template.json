@@ -14,7 +14,10 @@
         "storageAccounts_private_name": {
             "type": "String"
         },
-        "vaults_name": {
+        "vaults_main_name": {
+            "type": "String"
+        },
+        "vaults_edge_name": {
             "type": "String"
         }
     },
@@ -270,14 +273,35 @@
         {
             "type": "Microsoft.KeyVault/vaults/secrets",
             "apiVersion": "2019-09-01",
-            "name": "[concat(parameters('vaults_name'), '/FeatureFlagStorageKey')]",
+            "name": "[concat(parameters('vaults_main_name'), '/StorageConnectionString')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_private_name'))]"
             ],
             "properties": {
-                "value": "[listKeys(
-                    resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_private_name')), '2021-04-01'
-                ).keys[0].value]"
+                "value": "[concat(
+                    'DefaultEndpointsProtocol=https;AccountName=',
+                    parameters('storageAccounts_private_name'),
+                    ';AccountKey=',
+                    listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_private_name')), '2019-04-01').keys[0].value,
+                    ';EndpointSuffix=core.windows.net'
+                )]"
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('vaults_edge_name'), '/StorageConnectionString')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_private_name'))]"
+            ],
+            "properties": {
+                "value": "[concat(
+                    'DefaultEndpointsProtocol=https;AccountName=',
+                    parameters('storageAccounts_private_name'),
+                    ';AccountKey=',
+                    listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_private_name')), '2019-04-01').keys[0].value,
+                    ';EndpointSuffix=core.windows.net'
+                )]"
             }
         }
     ]

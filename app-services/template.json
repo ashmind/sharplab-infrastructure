@@ -102,6 +102,19 @@
                 "publicNetworkAccessForQuery": "Enabled"
             }
         },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('vaults_name'), '/AppInsightsTelemetryKey')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Insights/components', variables('components_insights_name'))]"
+            ],
+            "properties": {
+                "value": "[reference(
+                    resourceId('Microsoft.Insights/components', variables('components_insights_name')), '2015-05-01', 'Full'
+                ).properties.InstrumentationKey]"
+            }
+        },
 
         {
             "type": "Microsoft.Web/sites",
