@@ -19,10 +19,20 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - uses: ashmind/arm-deploy@main
+    - name: '[Edge] Run ashmind/arm-deploy@main'
+      uses: ashmind/arm-deploy@main
       with:
         deploymentName: "sharplab-configuration"
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
         template: ./configuration/template.json
-        parameters: ./configuration/parameters.json
+        parameters: ./configuration/parameters-edge.json
+
+    - name: '[Main] Run ashmind/arm-deploy@main'
+      uses: ashmind/arm-deploy@main
+      with:
+        deploymentName: "sharplab-configuration"
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
+        template: ./configuration/template.json
+        parameters: ./configuration/parameters-main.json
