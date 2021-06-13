@@ -3,7 +3,8 @@
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "AdminPassword", Justification = "https://github.com/PowerShell/PSScriptAnalyzer/issues/1472")]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "TelemetryKey", Justification = "https://github.com/PowerShell/PSScriptAnalyzer/issues/1472")]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "AuthorizationToken", Justification = "https://github.com/PowerShell/PSScriptAnalyzer/issues/1472")]
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingCmdletAliases", "ScheduledTask")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingCmdletAliases", "Package")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions")]
 
 param (
     [Parameter(Mandatory = $true)] [string] $AdminUserName,
@@ -16,86 +17,28 @@ Set-StrictMode -Version 2
 $ErrorActionPreference = 'Stop'
 
 # Home-made DSC :)
-function State() {
+function Set-State() {
     # TODO:
     # 1. Enable IIS
     # 2. Install .NET 5
-    # 3. Install Docker Desktop
-    # 4. Pull MS container
-    # 5. Setup IIS (website)
-    # 6. Give AppPool permissions to Docker pipe
+    # 3. Pull MS container
+    # 4. Setup IIS (website)
+    # 5. Give AppPool permissions to Docker pipe
 
     EnvironmentVariables @{
         SHARPLAB_TELEMETRY_KEY = $TelemetryKey
         SHARPLAB_CONTAINER_HOST_AUTHORIZATION_TOKEN = $AuthorizationToken
     }
 
-    ScheduledTask @{
-        Name = 'DockerDesktopStartup'
-        Login = @{
-            UserName = $AdminUserName
-            Password = $AdminPassword
-        }
-        Trigger = @{
-            At = 'Startup'
-            Delay = 'PT1M'
-        }
-        Action = @{
-            Execute = 'cmd'
-            Arguments = '/c start "" "C:\Program Files\Docker\Docker\Docker Desktop.exe"'
-        }
+    Package @{
+        Name = 'docker'
+        Provider = 'DockerMsftProvider'
+        Version = '20.10.5'
     }
 
-    Idempotent {
-        Write-Output "Unistall: Windows-Defender"
-        Uninstall-WindowsFeature -Name Windows-Defender
-    }
-}
-
-function ScheduledTask($options) {
-    Write-Output "Scheduled Task: $($options.Name)"
-    $existing = Get-ScheduledTask -TaskName $options.Name
-    if ($existing) {
-        $action = $existing.Actions[0]
-        $updated = $false
-        if (($action.Execute -ne $options.Action.Execute) -or ($action.Arguments -ne $options.Action.Arguments)) {
-            $action = New-ScheduledTaskAction -Execute $options.Action.Execute -Argument $options.Action.Arguments
-            Set-ScheduledTask `
-                -TaskName $options.Name `
-                -Action $action `
-                -User $options.Login.UserName `
-                -Password $options.Login.Password
-            $updated = $true
-        }
-
-        if ($updated) {
-            Write-Output "  - exists, updated"
-            return
-        }
-
-        Write-Output "  - exists, skipped"
-        return
-    }
-
-    $trigger = New-ScheduledTaskTrigger -AtStartup
-    $trigger.Delay = $options.Trigger.Delay
-
-    $action = New-ScheduledTaskAction -Execute $options.Action.Execute -Argument $options.Action.Arguments
-
-    $settings = New-ScheduledTaskSettingsSet -Compatibility Win8 -StartWhenAvailable -RestartCount 999
-
-    Register-ScheduledTask `
-        -TaskName $options.Name `
-        -Action $action `
-        -Trigger $trigger `
-        -Settings $settings `
-        -User $options.Login.UserName `
-        -Password $options.Login.Password
-    Write-Output "  - created"
-}
-
-function Idempotent($action) {
-    $action.Invoke()
+    UninstalledWindowsFeatures @(
+        'Windows-Defender'
+    )
 }
 
 function EnvironmentVariables($variables) {
@@ -106,4 +49,37 @@ function EnvironmentVariables($variables) {
     }
 }
 
-State
+function Package($options) {
+    Write-Output "Package: $($options.Name)"
+    if (Get-Package -Name $($options.Name) -ErrorAction SilentlyContinue) {
+        Write-Output "  - exists, skipped"
+        return
+    }
+
+    if (!(Get-Module -ListAvailable -Name $($options.Provider))) {
+        Install-Module `
+            -Name $($options.Provider) `
+            -Repository PSGallery
+    }
+
+    Install-Package `
+        -Name $($options.Name) `
+        -ProviderName $($options.Provider) `
+        -RequiredVersion $($options.Version)
+    Write-Output "  - installed"
+}
+
+function UninstalledWindowsFeatures($featureNames) {
+    $featureNames | % {
+        Write-Output "Unistall: $_"
+        if ((Get-WindowsFeature $_).InstallState -eq 'Installed') {
+            Uninstall-WindowsFeature -Name $_
+            Write-Output "  - uninstalled"
+        }
+        else {
+            Write-Output "  - already uninstalled, skipped"
+        }
+    }
+}
+
+Set-State
