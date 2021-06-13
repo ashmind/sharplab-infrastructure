@@ -55,7 +55,5 @@ jobs:
             --name sharplab-container-host \
             -g ${{ secrets.AZURE_RESOURCE_GROUP }} \
             --scripts @container-host/Initialize-ContainerHost.ps1 \
-            --parameters "AdminUserName=${{ secrets.CONTAINER_HOST_ADMIN_USERNAME }}" \
-                         "AdminPassword=${{ secrets.CONTAINER_HOST_ADMIN_PASSWORD }}" \
-                         "TelemetryKey=${telemetry_key}" \
+            --parameters "TelemetryKey=${telemetry_key}" \
                          "AuthorizationToken=${authorization_token}"
