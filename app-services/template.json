@@ -53,7 +53,12 @@
                 "name": "[concat(parameters('sites_architecture_prefix'), 'core-x64')]",
                 "use32BitWorkerProcess": false,
                 "netFrameworkVersion": "v5.0",
-                "extraAppSettings": []
+                "extraAppSettings": [
+                    {
+                        "name": "SHARPLAB_JITASM_DISABLE_METHOD_RESOLVER",
+                        "value": "true"
+                    }
+                ]
             },
             {
                 "name": "[concat(parameters('sites_architecture_prefix'), 'core-x64-profiled')]",
