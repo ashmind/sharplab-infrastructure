@@ -61,25 +61,6 @@
                 ]
             },
             {
-                "name": "[concat(parameters('sites_architecture_prefix'), 'core-x64-profiled')]",
-                "use32BitWorkerProcess": false,
-                "netFrameworkVersion": "v5.0",
-                "extraAppSettings": [
-                    {
-                        "name": "CORECLR_ENABLE_PROFILING",
-                        "value": "1"
-                    },
-                    {
-                        "name": "CORECLR_PROFILER",
-                        "value": "{67fb642f-51cd-4745-8b21-aacd2ec74e62}"
-                    },
-                    {
-                        "name": "CORECLR_PROFILER_PATH",
-                        "value": "D:\\home\\site\\wwwroot\\SharpLab.Native.Profiler.dll"
-                    }
-                ]
-            },
-            {
                 "name": "[concat(parameters('sites_architecture_prefix'), 'netfx')]",
                 "use32BitWorkerProcess": true,
                 "netFrameworkVersion": "v4.0",
