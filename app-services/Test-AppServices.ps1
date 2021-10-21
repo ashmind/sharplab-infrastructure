@@ -18,7 +18,6 @@ $parameters = ConvertFrom-Json (Get-Content $ParametersPath -Raw)
 
 @(
     "core-x64",
-    "core-x64-profiled",
     "netfx",
     "netfx-x64"
 ) | % {
