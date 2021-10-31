@@ -135,6 +135,20 @@
                 "publicAccess": "Blob"
             }
         },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2019-06-01",
+            "name": "[concat(parameters('storageAccounts_public_name'), '/default/cache')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_public_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_public_name'))]"
+            ],
+            "properties": {
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "Blob"
+            }
+        },
 
         {
             "type": "Microsoft.Storage/storageAccounts",
