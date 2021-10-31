@@ -35,6 +35,9 @@
         "sites_container_host_url": {
             "type": "String"
         },
+        "sites_cache_path_prefix": {
+            "type": "String"
+        },
         "vaults_name": {
             "type": "String"
         },
@@ -207,6 +210,10 @@
                         {
                             "name": "SHARPLAB_KEY_VAULT_URL",
                             "value": "[reference(resourceId('Microsoft.KeyVault/vaults', parameters('vaults_name')), '2019-09-01').vaultUri]"
+                        },
+                        {
+                            "name": "SHARPLAB_CACHE_PATH_PREFIX",
+                            "value": "[parameters('sites_cache_path_prefix')]"
                         }
                     ]
                 }
@@ -299,6 +306,10 @@
                             createObject(
                                 'name', 'SHARPLAB_KEY_VAULT_URL',
                                 'value', reference(resourceId('Microsoft.KeyVault/vaults', parameters('vaults_name')), '2019-09-01').vaultUri
+                            ),
+                            createObject(
+                                'name', 'SHARPLAB_CACHE_PATH_PREFIX',
+                                'value', parameters('sites_cache_path_prefix')
                             )
                         ),
                         variables('sites_architectures')[copyIndex()].extraAppSettings

@@ -273,6 +273,40 @@
         {
             "type": "Microsoft.KeyVault/vaults/secrets",
             "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('vaults_main_name'), '/PublicStorageConnectionString')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_public_name'))]"
+            ],
+            "properties": {
+                "value": "[concat(
+                    'DefaultEndpointsProtocol=https;AccountName=',
+                    parameters('storageAccounts_public_name'),
+                    ';AccountKey=',
+                    listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_public_name')), '2019-04-01').keys[0].value,
+                    ';EndpointSuffix=core.windows.net'
+                )]"
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('vaults_edge_name'), '/PublicStorageConnectionString')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_public_name'))]"
+            ],
+            "properties": {
+                "value": "[concat(
+                    'DefaultEndpointsProtocol=https;AccountName=',
+                    parameters('storageAccounts_public_name'),
+                    ';AccountKey=',
+                    listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_public_name')), '2019-04-01').keys[0].value,
+                    ';EndpointSuffix=core.windows.net'
+                )]"
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2019-09-01",
             "name": "[concat(parameters('vaults_main_name'), '/StorageConnectionString')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_private_name'))]"

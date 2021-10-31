@@ -26,6 +26,9 @@
         "sites_architecture_prefix": {
             "value": "sl-a-"
         },
+        "sites_cache_path_prefix": {
+            "value": "main"
+        },
         "serverfarms_main_name": {
             "value": "SharpLab-Main"
         },

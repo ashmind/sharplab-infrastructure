@@ -26,6 +26,9 @@
         "sites_architecture_prefix": {
             "value": "sl-a-edge-"
         },
+        "sites_cache_path_prefix": {
+            "value": "edge"
+        },
         "serverfarms_main_name": {
             "value": "SharpLab-Main"
         },
