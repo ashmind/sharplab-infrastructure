@@ -248,7 +248,69 @@
                             "hostName": "[variables('storageAccounts_public_hostName')]"
                         }
                     }
-                ]
+                ],
+                "deliveryPolicy": {
+                    "rules": [
+                        {
+                            "name": "AssetsCache",
+                            "order": 1,
+                            "conditions": [
+                                {
+                                    "name": "UrlPath",
+                                    "parameters": {
+                                        "operator": "BeginsWith",
+                                        "negateCondition": false,
+                                        "matchValues": [
+                                            "/assets/"
+                                        ],
+                                        "transforms": [],
+                                        "@odata.type": "#Microsoft.Azure.Cdn.Models.DeliveryRuleUrlPathMatchConditionParameters"
+                                    }
+                                }
+                            ],
+                            "actions": [
+                                {
+                                    "name": "CacheExpiration",
+                                    "parameters": {
+                                        "cacheBehavior": "SetIfMissing",
+                                        "cacheType": "All",
+                                        "cacheDuration": "365.00:00:00",
+                                        "@odata.type": "#Microsoft.Azure.Cdn.Models.DeliveryRuleCacheExpirationActionParameters"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "name": "CacheCache",
+                            "order": 2,
+                            "conditions": [
+                                {
+                                    "name": "UrlPath",
+                                    "parameters": {
+                                        "operator": "BeginsWith",
+                                        "negateCondition": false,
+                                        "matchValues": [
+                                            "/cache/"
+                                        ],
+                                        "transforms": [],
+                                        "@odata.type": "#Microsoft.Azure.Cdn.Models.DeliveryRuleUrlPathMatchConditionParameters"
+                                    }
+                                }
+                            ],
+                            "actions": [
+                                {
+                                    "name": "CacheExpiration",
+                                    "parameters": {
+                                        "cacheBehavior": "SetIfMissing",
+                                        "cacheType": "All",
+                                        "cacheDuration": "365.00:00:00",
+                                        "@odata.type": "#Microsoft.Azure.Cdn.Models.DeliveryRuleCacheExpirationActionParameters"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
             }
         },
 
