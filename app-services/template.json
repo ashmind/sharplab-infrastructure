@@ -44,6 +44,9 @@
         "sites_architecture_prefix": {
             "type": "String"
         },
+        "sites_netFrameworkVersion": {
+            "type": "String"
+        },
         "serverfarms_main_name": {
             "type": "String"
         }
@@ -55,7 +58,7 @@
             {
                 "name": "[concat(parameters('sites_architecture_prefix'), 'core-x64')]",
                 "use32BitWorkerProcess": false,
-                "netFrameworkVersion": "v5.0",
+                "netFrameworkVersion": "[parameters('sites_netFrameworkVersion')]",
                 "extraAppSettings": [
                     {
                         "name": "SHARPLAB_JITASM_DISABLE_METHOD_RESOLVER",
@@ -142,7 +145,7 @@
                 ],
                 "serverFarmId": "[variables('serverfarms_main_id')]",
                 "siteConfig": {
-                    "netFrameworkVersion": "v5.0",
+                    "netFrameworkVersion": "[parameters('sites_netFrameworkVersion')]",
                     "publishingUsername": "[concat('$', parameters('sites_default_name_azure'))]",
                     "use32BitWorkerProcess": true,
                     "webSocketsEnabled": true,

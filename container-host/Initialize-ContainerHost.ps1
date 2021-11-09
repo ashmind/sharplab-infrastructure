@@ -33,7 +33,7 @@ if (!([Environment]::GetCommandLineArgs() | ? { $_ -like '-noninteractive*' })) 
 function Set-State() {
     # TODO:
     # 1. Enable IIS
-    # 2. Install .NET 5
+    # 2. Install .NET 6
     # 3. Setup IIS (website)
 
     EnvironmentVariables @{

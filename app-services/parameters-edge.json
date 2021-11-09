@@ -26,6 +26,9 @@
         "sites_architecture_prefix": {
             "value": "sl-a-edge-"
         },
+        "sites_netFrameworkVersion": {
+            "value": "v6.0"
+        },
         "sites_cache_path_prefix": {
             "value": "edge"
         },
