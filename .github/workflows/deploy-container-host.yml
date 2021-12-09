@@ -35,7 +35,7 @@ jobs:
     - name: "VM: Initialize-ContainerHost.ps1"
       uses: azure/CLI@v1
       with:
-        azcliversion: 2.23.0
+        azcliversion: 2.30.0
         inlineScript: |
           az config set extension.use_dynamic_install=yes_without_prompt
           telemetry_key=$(az monitor app-insights component show \
