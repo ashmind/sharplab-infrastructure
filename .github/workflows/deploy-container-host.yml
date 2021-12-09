@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/deploy-container-host.yml'
       - 'container-host/**'
+  workflow_dispatch:
 
 name: Deploy Container Host
 

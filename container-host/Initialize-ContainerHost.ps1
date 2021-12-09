@@ -32,9 +32,8 @@ if (!([Environment]::GetCommandLineArgs() | ? { $_ -like '-noninteractive*' })) 
 # Home-made DSC :)
 function Set-State() {
     # TODO:
-    # 1. Enable IIS
-    # 2. Install .NET 6
-    # 3. Setup IIS (website)
+    # 1. Install .NET 6
+    # 2. Setup IIS (website)
 
     EnvironmentVariables @{
         SHARPLAB_TELEMETRY_KEY = $TelemetryKey
@@ -52,9 +51,9 @@ function Set-State() {
         }
     }
 
-    UserGroup @{
-        Name = 'docker-users'
-        Members = @('IIS APPPOOL\SharpLab.Container.Manager')
+    WindowsFeature @{
+        Name = 'Web-Server'
+        IncludeManagementTools = $true
     }
 
     UninstalledWindowsFeatures @(
@@ -70,37 +69,20 @@ function EnvironmentVariables($variables) {
     }
 }
 
-function UserGroup($options) {
-    Write-Output "User Group: $($options.Name)"
-    $created = $false
-    $updated = $false
-    $group = Get-LocalGroup $($options.Name) -ErrorAction SilentlyContinue
-    if (!$group) {
-        $group = New-LocalGroup -Name $($options.Name)
-        $created = $true
-    }
-
-    $options.Members | % {
-        if ($created -or !(Get-LocalGroupMember -Group $group -Member $_)) {
-            Add-LocalGroupMember -Group $group -Member $_
-            $script:updated = $true
-        }
-    }
-
-    if ($created) {
-        Write-Output '  - created'
-    }
-    elseif ($updated) {
-        Write-Output '  - updated'
+function WindowsFeature($options) {
+    Write-Output "Install: $($options.Name)"
+    if ((Get-WindowsFeature ($options.Name)).InstallState -ne 'Installed') {
+        Install-WindowsFeature -Name ($options.Name) -IncludeManagementTools ($options.IncludeManagementTools)
+        Write-Output "  - installed"
     }
     else {
-        Write-Output '  - exists, skipped'
+        Write-Output "  - already installed, skipped"
     }
 }
 
 function UninstalledWindowsFeatures($featureNames) {
     $featureNames | % {
-        Write-Output "Unistall: $_"
+        Write-Output "Uninstall: $_"
         if ((Get-WindowsFeature $_).InstallState -eq 'Installed') {
             Uninstall-WindowsFeature -Name $_
             Write-Output "  - uninstalled"
