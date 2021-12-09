@@ -72,7 +72,7 @@ function EnvironmentVariables($variables) {
 function WindowsFeature($options) {
     Write-Output "Install: $($options.Name)"
     if ((Get-WindowsFeature ($options.Name)).InstallState -ne 'Installed') {
-        Install-WindowsFeature -Name ($options.Name) -IncludeManagementTools ($options.IncludeManagementTools)
+        Install-WindowsFeature -Name ($options.Name) -IncludeManagementTools:($options.IncludeManagementTools)
         Write-Output "  - installed"
     }
     else {
