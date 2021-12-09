@@ -73,41 +73,12 @@
             }
         },
         {
-            "type": "Microsoft.Compute/disks",
-            "apiVersion": "2020-09-30",
-            "name": "[parameters('disks_name')]",
-            "location": "eastus",
-            "sku": {
-                "name": "StandardSSD_LRS",
-                "tier": "Standard"
-            },
-            "properties": {
-                "osType": "Windows",
-                "hyperVGeneration": "V1",
-                "creationData": {
-                    "createOption": "FromImage",
-                    "imageReference": {
-                        "id": "/Subscriptions/427fe0e5-3e7b-4400-aa52-720430d51781/Providers/Microsoft.Compute/Locations/eastus/Publishers/microsoftwindowsserver/ArtifactTypes/VMImage/Offers/windowsserver/Skus/2019-datacenter/Versions/17763.1935.2105080716"
-                    }
-                },
-                "diskSizeGB": 127,
-                "diskIOPSReadWrite": 500,
-                "diskMBpsReadWrite": 60,
-                "encryption": {
-                    "type": "EncryptionAtRestWithPlatformKey"
-                },
-                "diskState": "Attached",
-                "networkAccessPolicy": "AllowAll"
-            }
-        },
-        {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2020-12-01",
             "name": "[parameters('virtualMachines_name')]",
             "location": "eastus",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_name'))]",
-                "[resourceId('Microsoft.Compute/disks', parameters('disks_name'))]"
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_name'))]"
             ],
             "properties": {
                 "hardwareProfile": {
@@ -126,7 +97,7 @@
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
                         "managedDisk": {
-                            "id": "[resourceId('Microsoft.Compute/disks', parameters('disks_name'))]"
+                            "storageAccountType": "StandardSSD_LRS"
                         },
                         "diskSizeGB": 127
                     },
