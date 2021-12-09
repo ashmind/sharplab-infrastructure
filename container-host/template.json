@@ -5,6 +5,9 @@
         "virtualMachines_adminUsername": {
             "type": "SecureString"
         },
+        "virtualMachines_adminPassword": {
+            "type": "SecureString"
+        },
         "virtualMachines_name": {
             "type": "String"
         },
@@ -106,6 +109,7 @@
                 "osProfile": {
                     "computerName": "sharplab-contai",
                     "adminUsername": "[parameters('virtualMachines_adminUsername')]",
+                    "adminPassword": "[parameters('virtualMachines_adminPassword')]",
                     "windowsConfiguration": {
                         "provisionVMAgent": true,
                         "enableAutomaticUpdates": true,
