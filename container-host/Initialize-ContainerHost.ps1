@@ -31,10 +31,6 @@ if (!([Environment]::GetCommandLineArgs() | ? { $_ -like '-noninteractive*' })) 
 
 # Home-made DSC :)
 function Set-State() {
-    # TODO:
-    # 1. Install .NET 6
-    # 2. Setup IIS (website)
-
     EnvironmentVariables @{
         SHARPLAB_TELEMETRY_KEY = $TelemetryKey
         SHARPLAB_CONTAINER_HOST_AUTHORIZATION_TOKEN = $AuthorizationToken
@@ -59,6 +55,10 @@ function Set-State() {
     UninstalledWindowsFeatures @(
         'Windows-Defender'
     )
+
+    AspNetCoreHostingBundle
+
+    # website is set up by the code deployments
 }
 
 function EnvironmentVariables($variables) {
@@ -90,6 +90,24 @@ function UninstalledWindowsFeatures($featureNames) {
         else {
             Write-Output "  - already uninstalled, skipped"
         }
+    }
+}
+
+function AspNetCoreHostingBundle {
+    Write-Output "ASP.NET Core Hosting Bundle"
+    if (!(Get-Command 'dotnet' -ErrorAction SilentlyContinue)) {
+        if (!(Test-Path 'dotnet-hosting-6.0.0-win.exe')) {
+            Invoke-WebRequest 'https://download.visualstudio.microsoft.com/download/pr/c5971600-d95e-46b4-b99f-c75dad919237/25469268adf8be3d438355793ecb11da/dotnet-hosting-6.0.0-win.exe' -OutFile 'dotnet-hosting-6.0.0-win.exe'
+            Write-Output "  - downloaded"
+        }
+        ./dotnet-hosting-6.0.0-win.exe /quiet /install /norestart
+        if ($LastExitCode -ne 0) {
+            throw "dotnet-hosting-6.0.0-win.exe exited with code $LastExitCode"
+        }
+        Write-Output "  - installed"
+    }
+    else {
+        Write-Output "  - already installed, skipped"
     }
 }
 
