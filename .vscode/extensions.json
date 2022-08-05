@@ -1,7 +1,8 @@
 {
-	"recommendations": [
+    "recommendations": [
+        "EditorConfig.EditorConfig",
         "msazurermtools.azurerm-vscode-tools",
         "ms-vscode.powershell",
         "redhat.vscode-yaml"
-	]
+    ]
 }
