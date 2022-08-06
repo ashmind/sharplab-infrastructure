@@ -28,10 +28,12 @@
             "properties": {
                 "enabled": true,
                 "serverFarmId": "[variables('serverfarms_id')]",
+                "httpsOnly": true,
                 "siteConfig": {
                     "publishingUsername": "[concat('$', parameters('sites_name'))]",
                     "http20Enabled": true,
-                    "linuxFxVersion": "node|16",
+                    "linuxFxVersion": "NODE|16-lts",
+                    "appCommandLine": "./index.js",
                     "appSettings": [
                         {
                             "name": "WEBSITE_RUN_FROM_PACKAGE",
