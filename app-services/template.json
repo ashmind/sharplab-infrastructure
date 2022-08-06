@@ -49,9 +49,6 @@
         },
         "serverfarms_main_name": {
             "type": "String"
-        },
-        "sites_image_preview_name": {
-            "type": "String"
         }
     },
     "variables": {
@@ -358,58 +355,6 @@
             "copy": {
                 "name": "sites_architectures_roleAssignments_copy",
                 "count": "[length(variables('sites_architectures'))]"
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites",
-            "apiVersion": "2018-11-01",
-            "name": "[parameters('sites_image_preview_name')]",
-            "location": "East US",
-            "identity": {
-                "type": "SystemAssigned"
-            },
-            "tags": {
-                "[concat('hidden-related:', variables('serverfarms_main_id'))]": "empty"
-            },
-            "kind": "app",
-            "properties": {
-                "enabled": true,
-                "serverFarmId": "[variables('serverfarms_main_id')]",
-                "siteConfig": {
-                    "publishingUsername": "[concat('$', parameters('sites_image_preview_name'))]",
-                    "alwaysOn": true,
-                    "managedPipelineMode": "Integrated",
-                    "http20Enabled": true,
-                    "metadata": [
-                        {
-                            "name": "CURRENT_STACK",
-                            "value": "node"
-                        }
-                    ],
-                    "appSettings": [
-                        {
-                            "name": "WEBSITE_NODE_DEFAULT_VERSION",
-                            "value": "~16"
-                        },
-                        {
-                            "name": "WEBSITE_RUN_FROM_PACKAGE",
-                            "value": "1"
-                        }
-                    ]
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/hostNameBindings",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_image_preview_name'), '/', parameters('sites_image_preview_name'), '.azurewebsites.net')]",
-            "location": "East US",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_image_preview_name'))]"
-            ],
-            "properties": {
-                "siteName": "[parameters('sites_image_preview_name')]",
-                "hostNameType": "Verified"
             }
         }
     ]

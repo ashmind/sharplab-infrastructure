@@ -1,0 +1,54 @@
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/deploy-image-preview.yml'
+      - 'image-preview/**'
+
+name: Deploy Image Preview
+
+jobs:
+  deploy-edge:
+    name: Edge
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+    - uses: actions/checkout@main
+
+    - uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - uses: ashmind/arm-deploy@main
+      with:
+        deploymentName: "sharplab-image-preview-app-services-edge"
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
+        template: ./image-preview/app-services/template.json
+        parameters: ./image-preview/app-services/parameters-edge.json
+
+  deploy-main:
+    name: Main
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+    - uses: actions/checkout@main
+
+    - uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - uses: ashmind/arm-deploy@main
+      with:
+        deploymentName: "sharplab-image-preview-app-services-main"
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
+        template: ./image-preview/app-services/template.json
+        parameters: ./image-preview/app-services/parameters-main.json

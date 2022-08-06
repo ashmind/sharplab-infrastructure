@@ -37,9 +37,6 @@
         },
         "vaults_name": {
             "value": "sharplab"
-        },
-        "sites_image_preview_name": {
-            "value": "sl-image-preview"
         }
     }
 }
