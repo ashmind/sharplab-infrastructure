@@ -34,6 +34,7 @@ jobs:
   deploy-main:
     name: Main
     runs-on: ubuntu-latest
+    needs: deploy-edge
     permissions:
       id-token: write
     steps:
