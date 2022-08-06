@@ -22,16 +22,6 @@ jobs:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        enable-AzPSSession: true
-
-    - name: Run ./app-services/Update-CertificateThumbprint.ps1
-      uses: azure/powershell@v1
-      with:
-        inlineScript: |
-          $ErrorActionPreference = 'Stop'
-          ./app-services/Update-CertificateThumbprint.ps1 ./app-services/parameters-edge.json
-          ./app-services/Update-CertificateThumbprint.ps1 ./app-services/parameters-main.json
-        azPSVersion: '3.1.0'
 
     - name: '[Edge] Run ashmind/arm-deploy@main'
       uses: ashmind/arm-deploy@main
@@ -58,10 +48,10 @@ jobs:
         resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
         template: ./app-services/template.json
         parameters: './app-services/parameters-main.json
-              sites_default_assets_reload_token=${{ secrets.SHARPLAB_ASSETS_RELOAD_TOKEN_MAIN }}
-              sites_default_github_client_id=${{ secrets.SHARPLAB_GITHUB_CLIENT_ID_MAIN }}
-              sites_default_github_client_secret=${{ secrets.SHARPLAB_GITHUB_CLIENT_SECRET_MAIN }}
-              sites_container_experiment_key=${{ secrets.SHARPLAB_CONTAINER_EXPERIMENT_KEY }}'
+          sites_default_assets_reload_token=${{ secrets.SHARPLAB_ASSETS_RELOAD_TOKEN_MAIN }}
+          sites_default_github_client_id=${{ secrets.SHARPLAB_GITHUB_CLIENT_ID_MAIN }}
+          sites_default_github_client_secret=${{ secrets.SHARPLAB_GITHUB_CLIENT_SECRET_MAIN }}
+          sites_container_experiment_key=${{ secrets.SHARPLAB_CONTAINER_EXPERIMENT_KEY }}'
 
     - name: '[Main] Run ./app-services/Test-AppServices.ps1'
       run: ./app-services/Test-AppServices.ps1 ./app-services/parameters-main.json

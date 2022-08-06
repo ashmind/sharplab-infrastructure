@@ -26,7 +26,7 @@
         "sites_default_github_client_secret": {
             "type": "SecureString"
         },
-        "sites_default_certificate_thumbprint": {
+        "sites_default_certificate_name": {
             "type": "SecureString"
         },
         "sites_container_experiment_key": {
@@ -131,7 +131,7 @@
                     {
                         "name": "[parameters('sites_default_name_public')]",
                         "sslState": "SniEnabled",
-                        "thumbprint": "[parameters('sites_default_certificate_thumbprint')]",
+                        "thumbprint": "[reference(resourceId('Microsoft.Web/certificates', parameters('sites_default_certificate_name'))).Thumbprint]",
                         "hostType": "Standard"
                     },
                     {
@@ -236,7 +236,7 @@
                 "siteName": "[parameters('sites_default_name_azure')]",
                 "hostNameType": "Verified",
                 "sslState": "SniEnabled",
-                "thumbprint": "[parameters('sites_default_certificate_thumbprint')]"
+                "thumbprint": "[reference(resourceId('Microsoft.Web/certificates', parameters('sites_default_certificate_name'))).Thumbprint]"
             }
         },
         {
