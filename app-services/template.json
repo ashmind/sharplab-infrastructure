@@ -131,7 +131,7 @@
                     {
                         "name": "[parameters('sites_default_name_public')]",
                         "sslState": "SniEnabled",
-                        "thumbprint": "[reference(resourceId('Microsoft.Web/certificates', parameters('sites_default_certificate_name'))).Thumbprint]",
+                        "thumbprint": "[reference(resourceId('Microsoft.Web/certificates', parameters('sites_default_certificate_name')), '2022-03-01').Thumbprint]",
                         "hostType": "Standard"
                     },
                     {
@@ -236,7 +236,7 @@
                 "siteName": "[parameters('sites_default_name_azure')]",
                 "hostNameType": "Verified",
                 "sslState": "SniEnabled",
-                "thumbprint": "[reference(resourceId('Microsoft.Web/certificates', parameters('sites_default_certificate_name'))).Thumbprint]"
+                "thumbprint": "[reference(resourceId('Microsoft.Web/certificates', parameters('sites_default_certificate_name')), '2022-03-01').Thumbprint]"
             }
         },
         {
