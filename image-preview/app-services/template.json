@@ -33,7 +33,7 @@
                     "publishingUsername": "[concat('$', parameters('sites_name'))]",
                     "http20Enabled": true,
                     "linuxFxVersion": "NODE|16-lts",
-                    "appCommandLine": "apt-get update && apt-get install -y libgtk2.0-0 libnss3 libatk-bridge2.0-0 libdrm2 libxkbcommon0 libgbm1 libasound2 && node ./index.js",
+                    "appCommandLine": "apt-get update && apt-get install -y libgtk2.0-0 libnss3 libatk-bridge2.0-0 libdrm2 libxkbcommon0 libgbm1 libasound2 && groupadd -r appuser && useradd -r -g appuser -G audio,video appuser && mkdir -p /home/appuser/Downloads && chown -R appuser:appuser /home/appuser && chown -R appuser:appuser ./index.js && su - appuser && node ./index.js",
                     "appSettings": [
                         {
                             "name": "WEBSITE_RUN_FROM_PACKAGE",
