@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "profiles_cdn_name": {
+            "value": "SharpLab-CDN"
+        },
+        "profiles_endpoints_name": {
+            "value": "slpreview"
+        },
+        "profiles_endpoints_origins_name": {
+            "value": "sl-image-preview-azurewebsites-net"
+        },
+        "profiles_endpoints_origins_hostName": {
+            "value": "sl-image-preview.azurewebsites.net"
+        }
+    }
+}

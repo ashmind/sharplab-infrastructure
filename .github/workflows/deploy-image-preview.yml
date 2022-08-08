@@ -9,8 +9,8 @@ on:
 name: Deploy Image Preview
 
 jobs:
-  deploy-edge:
-    name: Edge
+  deploy-edge-app:
+    name: Edge - App
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -31,10 +31,10 @@ jobs:
         template: ./image-preview/app-services/template.json
         parameters: ./image-preview/app-services/parameters-edge.json
 
-  deploy-main:
-    name: Main
+  deploy-main-app:
+    name: Main - App
     runs-on: ubuntu-latest
-    needs: deploy-edge
+    needs: deploy-edge-app
     permissions:
       id-token: write
     steps:
@@ -53,3 +53,26 @@ jobs:
         resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
         template: ./image-preview/app-services/template.json
         parameters: ./image-preview/app-services/parameters-main.json
+
+  deploy-main-cdn:
+    name: Main - CDN
+    runs-on: ubuntu-latest
+    needs: deploy-main-app
+    permissions:
+      id-token: write
+    steps:
+    - uses: actions/checkout@main
+
+    - uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - uses: ashmind/arm-deploy@main
+      with:
+        deploymentName: "sharplab-image-preview-cdn-main"
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
+        template: ./image-preview/cdn/template.json
+        parameters: ./image-preview/cdn/parameters-edge.json

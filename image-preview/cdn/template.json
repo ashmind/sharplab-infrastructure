@@ -1,0 +1,37 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "profiles_cdn_name": {
+            "type": "String"
+        },
+        "profiles_endpoints_name": {
+            "type": "String"
+        },
+        "profiles_endpoints_origins_name": {
+            "type": "String"
+        },
+        "profiles_endpoints_origins_hostName": {
+            "type": "String"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Cdn/profiles/endpoints",
+            "apiVersion": "2020-04-15",
+            "name": "[concat(parameters('profiles_cdn_name'), '/', parameters('profiles_endpoints_name'))]",
+            "location": "WestUs",
+            "properties": {
+                "originHostHeader": "[parameters('profiles_endpoints_origins_hostName')]",
+                "origins": [
+                    {
+                        "name": "[parameters('profiles_endpoints_origins_name')]",
+                        "properties": {
+                            "hostName": "[parameters('profiles_endpoints_origins_hostName')]"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
