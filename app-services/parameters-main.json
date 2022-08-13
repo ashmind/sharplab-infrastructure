@@ -37,9 +37,6 @@
         },
         "vaults_name": {
             "value": "sharplab"
-        },
-        "sites_run_from_package": {
-            "value": "0"
         }
     }
 }

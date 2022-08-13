@@ -49,11 +49,6 @@
         },
         "serverfarms_main_name": {
             "type": "String"
-        },
-
-        "sites_run_from_package": {
-            "type": "String",
-            "allowedValues": ["1", "0"]
         }
     },
     "variables": {
@@ -176,7 +171,7 @@
                     "appSettings": [
                         {
                             "name": "WEBSITE_RUN_FROM_PACKAGE",
-                            "value": "[parameters('sites_run_from_package')]"
+                            "value": "1"
                         },
                         {
                             "name": "SHARPLAB_WEBAPP_NAME",
@@ -300,7 +295,7 @@
                         createArray(
                             createObject(
                                 'name', 'WEBSITE_RUN_FROM_PACKAGE',
-                                'value', parameters('sites_run_from_package')
+                                'value', '1'
                             ),
                             createObject(
                                 'name', 'SHARPLAB_WEBAPP_NAME',
