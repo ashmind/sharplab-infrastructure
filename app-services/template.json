@@ -49,6 +49,11 @@
         },
         "serverfarms_main_name": {
             "type": "String"
+        },
+
+        "sites_run_from_package": {
+            "type": "String",
+            "allowedValues": ["1", "0"]
         }
     },
     "variables": {
@@ -170,6 +175,10 @@
                     },
                     "appSettings": [
                         {
+                            "name": "WEBSITE_RUN_FROM_PACKAGE",
+                            "value": "[parameters('sites_run_from_package')]"
+                        },
+                        {
                             "name": "SHARPLAB_WEBAPP_NAME",
                             "value": "[parameters('sites_default_name_azure')]"
                         },
@@ -289,6 +298,10 @@
                     "http20Enabled": true,
                     "appSettings": "[concat(
                         createArray(
+                            createObject(
+                                'name', 'WEBSITE_RUN_FROM_PACKAGE',
+                                'value', parameters('sites_run_from_package')
+                            ),
                             createObject(
                                 'name', 'SHARPLAB_WEBAPP_NAME',
                                 'value', variables('sites_architectures')[copyIndex()].name

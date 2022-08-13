@@ -37,6 +37,9 @@
         },
         "vaults_name": {
             "value": "sharplab-edge"
+        },
+        "sites_run_from_package": {
+            "value": "1"
         }
     }
 }
