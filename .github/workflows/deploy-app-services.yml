@@ -9,8 +9,8 @@ on:
 name: Deploy App Services
 
 jobs:
-  deploy:
-    name: Deploy to Azure
+  deploy-edge:
+    name: Deploy Edge
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -23,7 +23,7 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-    - name: '[Edge] Run ashmind/arm-deploy@main'
+    - name: 'Run ashmind/arm-deploy@main'
       uses: ashmind/arm-deploy@main
       with:
         deploymentName: "sharplab-app-services-edge"
@@ -36,11 +36,32 @@ jobs:
           sites_default_github_client_secret=${{ secrets.SHARPLAB_GITHUB_CLIENT_SECRET_EDGE }}
           sites_container_experiment_key=${{ secrets.SHARPLAB_CONTAINER_EXPERIMENT_KEY }}'
 
+  test-edge:
+    name: Test Edge
+    runs-on: ubuntu-latest
+    needs: deploy-edge
+    steps:
+    - uses: actions/checkout@main
     - name: '[Edge] Run ./app-services/Test-AppServices.ps1'
       run: ./app-services/Test-AppServices.ps1 ./app-services/parameters-edge.json
       shell: pwsh
 
-    - name: '[Main] Run ashmind/arm-deploy@main'
+  deploy-main:
+    name: Deploy Main
+    runs-on: ubuntu-latest
+    needs: test-edge
+    permissions:
+      id-token: write
+    steps:
+    - uses: actions/checkout@main
+
+    - uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - name: 'Run ashmind/arm-deploy@main'
       uses: ashmind/arm-deploy@main
       with:
         deploymentName: "sharplab-app-services-main"
@@ -53,6 +74,12 @@ jobs:
           sites_default_github_client_secret=${{ secrets.SHARPLAB_GITHUB_CLIENT_SECRET_MAIN }}
           sites_container_experiment_key=${{ secrets.SHARPLAB_CONTAINER_EXPERIMENT_KEY }}'
 
-    - name: '[Main] Run ./app-services/Test-AppServices.ps1'
+  test-main:
+    name: Test Main
+    runs-on: ubuntu-latest
+    needs: deploy-main
+    steps:
+    - uses: actions/checkout@main
+    - name: 'Run ./app-services/Test-AppServices.ps1'
       run: ./app-services/Test-AppServices.ps1 ./app-services/parameters-main.json
       shell: pwsh
