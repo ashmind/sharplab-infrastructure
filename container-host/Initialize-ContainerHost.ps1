@@ -43,7 +43,7 @@ function Set-State() {
     Custom @{
         Name = 'ACL: Grant Read for C:\Deployments to Capability SID'
         Action = {
-            icacls C:\Deployments /grant '*S-1-15-3-1024-4233803318-1181731508-1220533431-3050556506-2713139869-1168708946-594703785-1824610955:(OI)(CI)R'
+            icacls C:\Deployments /grant '*S-1-15-3-1024-4233803318-1181731508-1220533431-3050556506-2713139869-1168708946-594703785-1824610955:(OI)(CI)RX'
         }
     }
 
