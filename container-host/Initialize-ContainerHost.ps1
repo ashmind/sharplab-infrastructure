@@ -95,17 +95,17 @@ function UninstalledWindowsFeatures($featureNames) {
 
 function AspNetCoreHostingBundle {
     Write-Output "ASP.NET Core Hosting Bundle"
-    $dotnetVersion = $null
+    $dotnetRuntimes = @()
     if ((Get-Command 'dotnet' -ErrorAction SilentlyContinue)) {
         try {
-            $dotnetVersion = [version]$(dotnet --version)
+            $dotnetRuntimes = @(dotnet --list-runtimes)
         }
         catch {
-            Write-Output "Failed to get dotnet version: $_"
+            Write-Output "Failed to list dotnet runtimes: $_"
         }
     }
 
-    if (!$dotnetVersion -or $dotnetVersion.Major -lt 7) {
+    if (-not ($dotnetRuntimes | ? { $_.Contains('Microsoft.AspNetCore.App 7.0.0') })) {
         if (!(Test-Path 'D:\dotnet-hosting-7.0.0-win.exe')) {
             Invoke-WebRequest 'https://download.visualstudio.microsoft.com/download/pr/8de163f5-5d91-4dc3-9d01-e0b031a03dd9/0170b328d569a49f6f6a080064309161/dotnet-hosting-7.0.0-win.exe' -OutFile 'D:\dotnet-hosting-7.0.0-win.exe'
             Write-Output "  - downloaded"
@@ -113,6 +113,10 @@ function AspNetCoreHostingBundle {
         D:\dotnet-hosting-7.0.0-win.exe /quiet /install /norestart
         if ($LastExitCode -ne 0) {
             throw "dotnet-hosting-7.0.0-win.exe exited with code $LastExitCode"
+        }
+        iisreset
+        if ($LastExitCode -ne 0) {
+            throw "iisreset exited with code $LastExitCode"
         }
         Write-Output "  - installed"
     }
