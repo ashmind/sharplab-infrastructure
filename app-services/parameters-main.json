@@ -27,7 +27,7 @@
             "value": "sl-a-"
         },
         "sites_netFrameworkVersion": {
-            "value": "v6.0"
+            "value": "v7.0"
         },
         "sites_cache_path_prefix": {
             "value": "main"
