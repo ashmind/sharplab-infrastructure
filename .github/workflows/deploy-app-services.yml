@@ -15,7 +15,7 @@ jobs:
     permissions:
       id-token: write
     steps:
-    - uses: actions/checkout@main
+    - uses: actions/checkout@v4
 
     - uses: azure/login@v1
       with:
@@ -79,7 +79,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: deploy-main
     steps:
-    - uses: actions/checkout@main
+    - uses: actions/checkout@v4
     - name: 'Run ./app-services/Test-AppServices.ps1'
       run: ./app-services/Test-AppServices.ps1 ./app-services/parameters-main.json
       shell: pwsh
