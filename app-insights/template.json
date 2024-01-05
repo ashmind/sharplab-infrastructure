@@ -1,0 +1,97 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workspace_name": {
+            "type": "String"
+        },
+        "insights_name": {
+            "type": "String"
+        },
+        "vault_name": {
+            "type": "String"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.OperationalInsights/workspaces",
+            "apiVersion": "2021-12-01-preview",
+            "name": "[parameters('workspace_name')]",
+            "location": "eastus",
+            "properties": {
+                "sku": {
+                    "name": "PerGB2018"
+                },
+                "retentionInDays": 30,
+                "features": {
+                    "enableLogAccessUsingOnlyResourcePermissions": true
+                },
+                "workspaceCapping": {
+                    "dailyQuotaGb": 0.05
+                },
+                "publicNetworkAccessForIngestion": "Enabled",
+                "publicNetworkAccessForQuery": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces/tables",
+            "apiVersion": "2021-12-01-preview",
+            "name": "[concat(parameters('workspace_name'), '/InsightsMetrics')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspace_name'))]"
+            ],
+            "properties": {
+                "totalRetentionInDays": 30,
+                "plan": "Analytics",
+                "schema": {
+                    "name": "InsightsMetrics"
+                },
+                "retentionInDays": 30
+            }
+        },
+        {
+            "type": "microsoft.insights/components",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[parameters('insights_name')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspace_name'))]"
+            ],
+            "location": "eastus",
+            "kind": "other",
+            "properties": {
+                "Application_Type": "other",
+                "RetentionInDays": 30,
+                "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspace_name'))]",
+                "IngestionMode": "LogAnalytics",
+                "publicNetworkAccessForIngestion": "Enabled",
+                "publicNetworkAccessForQuery": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('vault_name'), '/AppInsightsInstrumentationKey')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Insights/components', parameters('insights_name'))]"
+            ],
+            "properties": {
+                "value": "[reference(
+                    resourceId('Microsoft.Insights/components', parameters('insights_name')), '2015-05-01', 'Full'
+                ).properties.InstrumentationKey]"
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('vault_name'), '/AppInsightsConnectionString')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Insights/components', parameters('insights_name'))]"
+            ],
+            "properties": {
+                "value": "[reference(
+                    resourceId('Microsoft.Insights/components', parameters('insights_name')), '2015-05-01', 'Full'
+                ).properties.ConnectionString]"
+            }
+        }
+    ]
+}
