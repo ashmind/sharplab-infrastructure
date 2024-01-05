@@ -7,6 +7,9 @@
         },
         "insights_name": {
             "value": "sharplab-edge-insights"
+        },
+        "vault_name": {
+            "value": "sharplab-edge"
         }
     }
 }
