@@ -82,32 +82,6 @@
     },
     "resources": [
         {
-            "type": "microsoft.insights/components",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[variables('components_insights_name')]",
-            "location": "eastus",
-            "kind": "other",
-            "properties": {
-                "Application_Type": "other",
-                "RetentionInDays": 90,
-                "publicNetworkAccessForIngestion": "Enabled",
-                "publicNetworkAccessForQuery": "Enabled"
-            }
-        },
-        {
-            "type": "Microsoft.KeyVault/vaults/secrets",
-            "apiVersion": "2019-09-01",
-            "name": "[concat(parameters('vaults_name'), '/AppInsightsInstrumentationKey')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Insights/components', variables('components_insights_name'))]"
-            ],
-            "properties": {
-                "value": "[reference(
-                    resourceId('Microsoft.Insights/components', variables('components_insights_name')), '2015-05-01', 'Full'
-                ).properties.InstrumentationKey]"
-            }
-        },
-        {
             "type": "Microsoft.Web/sites",
             "apiVersion": "2018-11-01",
             "name": "[parameters('sites_default_name_azure')]",
@@ -115,9 +89,6 @@
             "identity": {
                 "type": "SystemAssigned"
             },
-            "dependsOn": [
-                "[resourceId('Microsoft.Insights/components', variables('components_insights_name'))]"
-            ],
             "tags": {
                 "[concat('hidden-related:', variables('serverfarms_main_id'))]": "empty"
             },
