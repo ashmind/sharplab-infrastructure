@@ -26,6 +26,7 @@ jobs:
     - name: 'Run ashmind/arm-deploy@main'
       uses: ashmind/arm-deploy@main
       with:
+        scope: 'resourcegroup'
         deploymentName: "sharplab-app-services-edge"
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
@@ -64,6 +65,7 @@ jobs:
     - name: 'Run ashmind/arm-deploy@main'
       uses: ashmind/arm-deploy@main
       with:
+        scope: 'resourcegroup'
         deploymentName: "sharplab-app-services-main"
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
