@@ -11,9 +11,6 @@
         "sites_default_assets_base_url": {
             "type": "String"
         },
-        "sites_default_assets_latest_url": {
-            "type": "String"
-        },
         "sites_default_assets_latest_url_v2": {
             "type": "String"
         },
@@ -53,7 +50,6 @@
     },
     "variables": {
         "serverfarms_main_id": "[resourceId('Microsoft.Web/serverFarms', parameters('serverfarms_main_name'))]",
-        "components_insights_name": "[concat(parameters('sites_default_name_azure'), '-insights')]",
         "sites_architectures": [
             {
                 "name": "[concat(parameters('sites_architecture_prefix'), 'core-x64')]",
@@ -149,16 +145,8 @@
                             "value": "[parameters('sites_default_name_azure')]"
                         },
                         {
-                            "name": "SHARPLAB_TELEMETRY_KEY",
-                            "value": "[reference(resourceId('Microsoft.Insights/components', variables('components_insights_name')), '2015-05-01', 'Full').properties.InstrumentationKey]"
-                        },
-                        {
                             "name": "SHARPLAB_ASSETS_BASE_URL",
                             "value": "[parameters('sites_default_assets_base_url')]"
-                        },
-                        {
-                            "name": "SHARPLAB_ASSETS_LATEST_URL",
-                            "value": "[parameters('sites_default_assets_latest_url')]"
                         },
                         {
                             "name": "SHARPLAB_ASSETS_LATEST_URL_V2",
@@ -268,10 +256,6 @@
                             createObject(
                                 'name', 'SHARPLAB_WEBAPP_NAME',
                                 'value', variables('sites_architectures')[copyIndex()].name
-                            ),
-                            createObject(
-                                'name', 'SHARPLAB_TELEMETRY_KEY',
-                                'value', reference(resourceId('Microsoft.Insights/components', variables('components_insights_name')), '2015-05-01', 'Full').properties.InstrumentationKey
                             ),
                             createObject(
                                 'name', 'SHARPLAB_CONTAINER_EXPERIMENT_KEY',
