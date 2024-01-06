@@ -2,36 +2,37 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "virtualMachines_adminUsername": {
+        "virtualMachine_admin_username": {
             "type": "SecureString"
         },
-        "virtualMachines_adminPassword": {
+        "virtualMachine_admin_password": {
             "type": "SecureString"
         },
-        "virtualMachines_name": {
+        "virtualMachine_name": {
             "type": "String"
         },
-        "networkInterfaces_name": {
+        "virtualNetwork_name": {
             "type": "String"
         },
-        "disks_name": {
+        "networkInterface_name": {
             "type": "String"
         },
-        "virtualNetworks_name": {
+        "disk_name": {
             "type": "String"
         }
     },
     "variables": {
-        "domainName": "[parameters('virtualMachines_name')]",
-        "networkSecurityGroups_name": "[concat(parameters('virtualMachines_name'), '-nsg')]",
-        "components_insights_name": "[concat(parameters('virtualMachines_name'), '-insights')]",
-        "publicIPAddresses_name": "[concat(parameters('virtualMachines_name'), '-ip')]"
+        "domainName": "[parameters('virtualMachine_name')]",
+        "networkSecurityGroup_name": "[concat(parameters('virtualMachine_name'), '-nsg')]",
+        "insights_name": "[concat(parameters('virtualMachine_name'), '-insights')]",
+        "insights_workspace_name": "[concat(parameters('virtualMachine_name'), '-log-analytics-workspace')]",
+        "publicIPAddress_name": "[concat(parameters('virtualMachine_name'), '-ip')]"
     },
     "resources": [
         {
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2020-11-01",
-            "name": "[variables('networkSecurityGroups_name')]",
+            "name": "[variables('networkSecurityGroup_name')]",
             "location": "eastus",
             "properties": {
                 "securityRules": [
@@ -58,7 +59,7 @@
         {
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2020-11-01",
-            "name": "[variables('publicIPAddresses_name')]",
+            "name": "[variables('publicIPAddress_name')]",
             "location": "eastus",
             "sku": {
                 "name": "Basic",
@@ -78,10 +79,10 @@
         {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2020-12-01",
-            "name": "[parameters('virtualMachines_name')]",
+            "name": "[parameters('virtualMachine_name')]",
             "location": "eastus",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_name'))]"
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterface_name'))]"
             ],
             "properties": {
                 "hardwareProfile": {
@@ -96,7 +97,7 @@
                     },
                     "osDisk": {
                         "osType": "Windows",
-                        "name": "[parameters('disks_name')]",
+                        "name": "[parameters('disk_name')]",
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
                         "managedDisk": {
@@ -108,8 +109,8 @@
                 },
                 "osProfile": {
                     "computerName": "sharplab-contai",
-                    "adminUsername": "[parameters('virtualMachines_adminUsername')]",
-                    "adminPassword": "[parameters('virtualMachines_adminPassword')]",
+                    "adminUsername": "[parameters('virtualMachine_admin_username')]",
+                    "adminPassword": "[parameters('virtualMachine_admin_password')]",
                     "windowsConfiguration": {
                         "provisionVMAgent": true,
                         "enableAutomaticUpdates": true,
@@ -124,7 +125,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_name'))]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterface_name'))]"
                         }
                     ]
                 }
@@ -133,9 +134,9 @@
         {
             "type": "Microsoft.Network/networkSecurityGroups/securityRules",
             "apiVersion": "2020-11-01",
-            "name": "[concat(variables('networkSecurityGroups_name'), '/HTTP')]",
+            "name": "[concat(variables('networkSecurityGroup_name'), '/HTTP')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_name'))]"
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroup_name'))]"
             ],
             "properties": {
                 "protocol": "TCP",
@@ -155,12 +156,12 @@
         {
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2020-11-01",
-            "name": "[parameters('networkInterfaces_name')]",
+            "name": "[parameters('networkInterface_name')]",
             "location": "eastus",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_name'))]",
-                "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddresses_name'))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_name'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetwork_name'))]",
+                "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddress_name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroup_name'))]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -170,10 +171,10 @@
                             "privateIPAddress": "10.0.0.4",
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddresses_name'))]"
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddress_name'))]"
                             },
                             "subnet": {
-                                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_name')), '/subnets/default')]"
+                                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetwork_name')), '/subnets/default')]"
                             },
                             "primary": true,
                             "privateIPAddressVersion": "IPv4"
@@ -186,14 +187,14 @@
                 "enableAcceleratedNetworking": false,
                 "enableIPForwarding": false,
                 "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_name'))]"
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroup_name'))]"
                 }
             }
         },
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2020-11-01",
-            "name": "[parameters('virtualNetworks_name')]",
+            "name": "[parameters('virtualNetwork_name')]",
             "location": "eastus",
             "properties": {
                 "addressSpace": {
@@ -219,9 +220,9 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2020-11-01",
-            "name": "[concat(parameters('virtualNetworks_name'), '/default')]",
+            "name": "[concat(parameters('virtualNetwork_name'), '/default')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_name'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetwork_name'))]"
             ],
             "properties": {
                 "addressPrefix": "10.0.0.0/24",
@@ -231,14 +232,39 @@
             }
         },
         {
+            "type": "Microsoft.OperationalInsights/workspaces",
+            "apiVersion": "2021-12-01-preview",
+            "name": "[variables('insights_workspace_name')]",
+            "location": "eastus",
+            "properties": {
+                "sku": {
+                    "name": "PerGB2018"
+                },
+                "retentionInDays": 30,
+                "features": {
+                    "enableLogAccessUsingOnlyResourcePermissions": true
+                },
+                "workspaceCapping": {
+                    "dailyQuotaGb": 0.05
+                },
+                "publicNetworkAccessForIngestion": "Enabled",
+                "publicNetworkAccessForQuery": "Enabled"
+            }
+        },
+        {
             "type": "microsoft.insights/components",
             "apiVersion": "2018-05-01-preview",
-            "name": "[variables('components_insights_name')]",
+            "name": "[variables('insights_name')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', variables('insights_workspace_name'))]"
+            ],
             "location": "eastus",
             "kind": "other",
             "properties": {
                 "Application_Type": "other",
-                "RetentionInDays": 90,
+                "RetentionInDays": 30,
+                "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('insights_workspace_name'))]",
+                "IngestionMode": "LogAnalytics",
                 "publicNetworkAccessForIngestion": "Enabled",
                 "publicNetworkAccessForQuery": "Enabled"
             }

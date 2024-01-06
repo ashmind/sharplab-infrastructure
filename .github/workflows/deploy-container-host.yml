@@ -33,8 +33,8 @@ jobs:
         resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
         template: ./container-host/template.json
         parameters: './container-host/parameters.json
-          virtualMachines_adminUsername=${{ secrets.CONTAINER_HOST_ADMIN_USERNAME }}
-          virtualMachines_adminPassword=${{ secrets.CONTAINER_HOST_ADMIN_PASSWORD }}'
+          virtualMachine_admin_username=${{ secrets.CONTAINER_HOST_ADMIN_USERNAME }}
+          virtualMachine_admin_password=${{ secrets.CONTAINER_HOST_ADMIN_PASSWORD }}'
 
     # TODO: Fail build if this fails -- currently it always reports success
     - name: "VM: Initialize-ContainerHost.ps1"
