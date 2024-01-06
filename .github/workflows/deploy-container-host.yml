@@ -27,6 +27,7 @@ jobs:
 
     - uses: ashmind/arm-deploy@main
       with:
+        scope: 'resourcegroup'
         deploymentName: "sharplab-container-host"
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
@@ -49,6 +50,13 @@ jobs:
             --output tsv)
           echo "::add-mask::${telemetry_key}"
 
+          telemetry_connection_string=$(az monitor app-insights component show \
+            --app sharplab-container-host-insights \
+            -g ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --query connectionString \
+            --output tsv)
+          echo "::add-mask::${telemetry_connection_string}"
+
           authorization_token=$(az keyvault secret show \
             --name ContainerHostAuthorizationToken \
             --vault-name sharplab \
@@ -62,4 +70,5 @@ jobs:
             -g ${{ secrets.AZURE_RESOURCE_GROUP }} \
             --scripts @container-host/Initialize-ContainerHost.ps1 \
             --parameters "TelemetryKey=${telemetry_key}" \
+                         "TelemetryConnectionString=${telemetry_connection_string}" \
                          "AuthorizationToken=${authorization_token}"

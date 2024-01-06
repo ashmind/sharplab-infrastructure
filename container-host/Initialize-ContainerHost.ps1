@@ -2,12 +2,14 @@
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "AdminUserName", Justification = "https://github.com/PowerShell/PSScriptAnalyzer/issues/1472")]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "AdminPassword", Justification = "https://github.com/PowerShell/PSScriptAnalyzer/issues/1472")]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "TelemetryKey", Justification = "https://github.com/PowerShell/PSScriptAnalyzer/issues/1472")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "TelemetryConnectionString", Justification = "https://github.com/PowerShell/PSScriptAnalyzer/issues/1472")]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "AuthorizationToken", Justification = "https://github.com/PowerShell/PSScriptAnalyzer/issues/1472")]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingCmdletAliases", "Package")]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
 
 param (
     [Parameter(Mandatory = $true)] [string] $TelemetryKey,
+    [Parameter(Mandatory = $true)] [string] $TelemetryConnectionString,
     [Parameter(Mandatory = $true)] [string] $AuthorizationToken
 )
 
@@ -21,6 +23,7 @@ if (!([Environment]::GetCommandLineArgs() | ? { $_ -like '-noninteractive*' })) 
             '-NonInteractive',
             '-File', $MyInvocation.MyCommand.Path,
             '-TelemetryKey', $TelemetryKey,
+            'TelemetryConnectionString', $TelemetryConnectionString,
             '-AuthorizationToken', $AuthorizationToken
         ) `
         -Wait `
@@ -33,6 +36,7 @@ if (!([Environment]::GetCommandLineArgs() | ? { $_ -like '-noninteractive*' })) 
 function Set-State() {
     EnvironmentVariables @{
         SHARPLAB_TELEMETRY_KEY = $TelemetryKey
+        SHARPLAB_TELEMETRY_CONNECTION_STRING = $TelemetryConnectionString
         SHARPLAB_CONTAINER_HOST_AUTHORIZATION_TOKEN = $AuthorizationToken
     }
 
