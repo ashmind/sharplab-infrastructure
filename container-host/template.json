@@ -253,7 +253,7 @@
         },
         {
             "type": "microsoft.insights/components",
-            "apiVersion": "2018-05-01-preview",
+            "apiVersion": "2020-02-02",
             "name": "[variables('insights_name')]",
             "dependsOn": [
                 "[resourceId('Microsoft.OperationalInsights/workspaces', variables('insights_workspace_name'))]"
