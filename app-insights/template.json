@@ -63,6 +63,7 @@
                 "RetentionInDays": 30,
                 "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspace_name'))]",
                 "IngestionMode": "LogAnalytics",
+                "CustomMetricsOptedInType": "WithDimensions",
                 "publicNetworkAccessForIngestion": "Enabled",
                 "publicNetworkAccessForQuery": "Enabled"
             }
