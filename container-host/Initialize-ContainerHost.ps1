@@ -107,7 +107,7 @@ function AspNetCoreHostingBundle {
 
     if (-not ($dotnetRuntimes | ? { $_.Contains('Microsoft.AspNetCore.App 9.0.0') })) {
         if (!(Test-Path 'D:\dotnet-hosting-9.0.0-win.exe')) {
-            Invoke-WebRequest 'https://download.visualstudio.microsoft.com/download/pr/e1ae9d41-3faf-4755-ac27-b24e84eef3d1/5e3a24eb8c1a12272ea1fe126d17dfca/dotnet-hosting-9.0.0-win.exe'
+            Invoke-WebRequest 'https://download.visualstudio.microsoft.com/download/pr/e1ae9d41-3faf-4755-ac27-b24e84eef3d1/5e3a24eb8c1a12272ea1fe126d17dfca/dotnet-hosting-9.0.0-win.exe' -OutFile 'D:\dotnet-hosting-9.0.0-win.exe'
             Write-Output "  - downloaded"
         }
         D:\dotnet-hosting-9.0.0-win.exe /quiet /install /norestart
